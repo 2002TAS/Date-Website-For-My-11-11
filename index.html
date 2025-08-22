@@ -228,12 +228,16 @@
   </div>
 
 <script>
-  // SPA page controls
+  // SPA page controls and audio play on user interaction
   const page1 = document.getElementById('page1');
   const page2 = document.getElementById('page2');
   const yesButton = document.getElementById('yesButton');
+  const music = new Audio('song.mp3');
+  music.loop = true;
+  music.volume = 0.3;
 
   yesButton.onclick = () => {
+    music.play().catch(() => {/* Autoplay blocked fallback */});
     page1.classList.add('exit');
     page1.classList.remove('active');
     setTimeout(() => {
@@ -242,7 +246,7 @@
     }, 1100);
   };
 
-  /* PIXI.JS Background Setup */
+  // PIXI.js Setup
   const app = new PIXI.Application({
     view: document.getElementById('pixi-canvas'),
     resizeTo: window,
@@ -252,7 +256,7 @@
     alpha: true,
   });
 
-  // Create petals group
+  // Petals group
   const petals = [];
   const petalCount = 18;
   const petalTexture = PIXI.Texture.from('https://i.ibb.co/gwQhDdD/rose-petal.png');
@@ -271,13 +275,13 @@
     app.stage.addChild(petal);
   }
 
-  // Create golden orb sparkles group with varied sizes and alpha
+  // Golden orb sparkles group with sizes and alpha
   const orbs = [];
-  const orbCount = 22;
+  const orbCount = 28;
 
   for (let i = 0; i < orbCount; i++) {
     const orb = new PIXI.Graphics();
-    const color = 0xffd54f; // warm gold
+    const color = 0xffd54f;
     const radius = (5 + Math.random() * 8) * (Math.random() < 0.3 ? 1.5 : 1);
     const alpha = 0.1 + Math.random() * 0.25;
     orb.beginFill(color, alpha);
@@ -291,7 +295,6 @@
     orbs.push(orb);
     app.stage.addChild(orb);
 
-    // Extra subtle glow for bigger orbs
     if (radius > 9) {
       const glow = new PIXI.Graphics();
       glow.beginFill(color, 0.06);
@@ -300,7 +303,6 @@
       glow.x = orb.x;
       glow.y = orb.y;
       app.stage.addChild(glow);
-      // Animate glow to follow orb
       app.ticker.add(() => {
         glow.x = orb.x;
         glow.y = orb.y;
@@ -332,7 +334,7 @@
     });
   });
 
-  // Device orientation parallax - subtle for mobile devices
+  // Device orientation parallax effect
   window.addEventListener('deviceorientation', e => {
     const gamma = e.gamma || 0;
     const beta = e.beta || 0;
