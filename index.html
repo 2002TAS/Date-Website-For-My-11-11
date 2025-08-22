@@ -4,10 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Romantic Date Invitation SPA for Priya</title>
-  <!-- Fonts: La Belle Aurore for paragraphs, Parisienne for headings, Quicksand for buttons -->
-  <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Parisienne&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Parisienne&family=Quicksand:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
-
   <style>
     :root {
       --pink1: #FFE5EC;
@@ -16,9 +15,7 @@
       --pink4: #FF8FAB;
       --pink5: #FB6F92;
     }
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw; height: 100vh; min-height: 100vh;
       background: linear-gradient(135deg, var(--pink1) 0%, var(--pink2) 35%, var(--pink3) 65%, var(--pink5) 100%);
@@ -135,11 +132,11 @@
       text-align: center;
     }
     button {
-      font-family: 'Quicksand', Arial, sans-serif;
+      font-family: 'Great Vibes', cursive;
       padding: 16px 50px;
-      font-size: 1.22rem;
+      font-size: 2.25rem;
       font-weight: 600;
-      letter-spacing: 0.065em;
+      letter-spacing: 0.12em;
       cursor: pointer;
       border: none;
       border-radius: 30px;
@@ -149,16 +146,16 @@
       user-select: none;
       margin-top: 1rem;
       margin-bottom: 3rem;
-      transition: background 0.3s ease, transform 0.3s ease;
+      transition: background 0.3s ease, transform 0.18s cubic-bezier(.61,.09,.63,1.21), box-shadow 0.28s;
     }
     button:hover, button:focus {
       background: linear-gradient(135deg, var(--pink5), var(--pink4));
-      transform: scale(1.05);
+      transform: scale(1.08);
       box-shadow: 0 0 44px var(--pink5);
       outline: none;
     }
     button:active {
-      transform: scale(0.95);
+      transform: scale(0.93);
       box-shadow: 0 0 12px var(--pink4);
     }
     #loveNote {
@@ -171,82 +168,77 @@
       border-radius: 28px;
       box-shadow: 0 16px 36px rgba(251, 107, 143, 0.22);
       position: fixed;
-      bottom: 130px;
-      right: 38px;
+      bottom: 110px;
+      right: 30px;
       display: none;
       z-index: 31;
       text-align: center;
       line-height: 1.9;
       letter-spacing: 0.11em;
       font-weight: 500;
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+      transition: opacity 0.32s cubic-bezier(.56,1.03,.7,1.4), transform 0.32s cubic-bezier(.56,1.03,.7,1.4);
+    }
+    #loveNote.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0) scale(1.04);
     }
     #roseHeart {
       position: fixed;
-      bottom: 28px;
-      right: 28px;
-      width: 66px;
-      height: 66px;
-      background: url('https://cdn.iconscout.com/icon/free/png-256/heart-170-458970.png') no-repeat center/contain;
-      filter: drop-shadow(0 0 15px var(--pink4));
+      bottom: 26px;
+      right: 26px;
+      width: 70px;
+      height: 70px;
+      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center/contain;
+      background-size: contain;
       cursor: pointer;
-      border-radius: 50%;
       opacity: 0.85;
+      border-radius: 50%;
       user-select: none;
-      z-index: 30;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 40;
+      filter: drop-shadow(0 0 15px var(--pink4));
+      transition: filter 0.22s, opacity 0.25s;
+      animation: heartPulse 2.9s infinite;
+    }
+    #roseHeart.pop {
+      animation: heartPop 0.39s cubic-bezier(.69,1.7,.53,.88) 1;
+      filter: drop-shadow(0 0 27px var(--pink5));
+    }
+    @keyframes heartPop {
+      0% { transform: scale(1) rotate(0deg);}
+      10% { transform: scale(1.23) rotate(-8deg);}
+      35% { transform: scale(0.9) rotate(7deg);}
+      60% { transform: scale(1.11) rotate(-4deg);}
+      100% { transform: scale(1.06) rotate(0);}
+    }
+    @keyframes heartPulse {
+      0%, 100% { transform: scale(1);}
+      18% { transform: scale(1.06);}
+      35% { transform: scale(0.98);}
+      55% { transform: scale(1.09);}
+      80% { transform: scale(1);}
     }
     #roseHeart:hover {
-      transform: scale(1.15);
       opacity: 1;
-      filter: drop-shadow(0 0 25px var(--pink5));
+      filter: drop-shadow(0 0 34px var(--pink5));
     }
-    /* Utilities */
     @keyframes shine {
-      0% {
-        transform: translateX(-110%) translateY(-50%) rotate(12deg);
-      }
-      100% {
-        transform: translateX(120%) translateY(-50%) rotate(12deg);
-      }
+      0% { transform: translateX(-110%) translateY(-50%) rotate(12deg);}
+      100% { transform: translateX(120%) translateY(-50%) rotate(12deg);}
     }
     @keyframes blinkLoading {
-      0%, 50%, 100% {
-        opacity: 1;
-      }
-      25%, 75% {
-        opacity: 0;
-      }
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
     }
-    /* Responsive */
     @media (max-width: 650px) {
-      .page {
-        padding: 0 4vw;
-      }
-      h1 {
-        font-size: 2rem;
-        max-width: 90vw;
-      }
-      p.lap {
-        font-size: 1.1rem;
-        max-width: 90vw;
-      }
-      button {
-        font-size: 1rem;
-        padding: 14px 38px;
-      }
-      #loveNote {
-        max-width: 85vw;
-        font-size: 1.05rem;
-        padding: 20px 30px;
-        bottom: 90px;
-        right: 10vw;
-      }
-      #roseHeart {
-        width: 48px;
-        height: 48px;
-        bottom: 16px;
-        right: 16px;
-      }
+      .page { padding: 0 4vw;}
+      h1 { font-size: 2rem; max-width: 90vw;}
+      p.lap { font-size: 1.1rem; max-width: 90vw;}
+      button { font-size: 1.5rem; padding: 12px 29px; }
+      #loveNote { max-width: 87vw; font-size: 1.05rem; padding: 20px 18px; bottom: 70px; right: 7vw;}
+      #roseHeart { width: 45px; height:45px; bottom: 7px; right: 8px; }
     }
   </style>
 </head>
@@ -260,7 +252,6 @@
       <p class="lap">Would you like to join me for a date day tomorrow on the fine Saturday of August 23, in the big year of 2025? I would love to court you across the big apple.</p>
       <button id="yesButton" aria-label="Confirm attendance for the date">Yes</button>
     </section>
-
     <section id="page2" class="page" aria-label="Date vibe and photos" tabindex="-1">
       <h1>Welcome to Our Date Day, Priya</h1>
       <p class="lap">Imagine a day full of delicious food that originated from more than 2000 years ago, art whispering stories, drinks sparkling softly, roses, gentle jasmine filling the air, and love letters waiting to be unfolded.</p>
@@ -271,16 +262,13 @@
       </div>
     </section>
   </div>
-
   <div id="roseHeart" tabindex="0" role="button" aria-pressed="false" aria-label="Toggle love note" title="Click to show or hide the love note"></div>
   <div id="loveNote" role="alert" aria-live="assertive">
     I love you Priya.<br />
     I hope you like this little creation I made ra.<br />
     Tomorrow will be an amazing day & I can't wait to begin it.
   </div>
-
   <script>
-    // Handle loading screen
     window.onload = () => {
       const loading = document.getElementById('loading');
       const app = document.getElementById('app');
@@ -291,7 +279,7 @@
       }, 1000);
     };
 
-    // Music plays muted, unmute on interaction
+    // Music
     const music = document.getElementById('music');
     music.volume = 0.3;
     music.play().catch(() => {});
@@ -302,7 +290,7 @@
       }
     }, { once: true });
 
-    // Handle page navigation
+    // Page nav
     const page1 = document.getElementById('page1');
     const page2 = document.getElementById('page2');
     const yesButton = document.getElementById('yesButton');
@@ -316,14 +304,21 @@
       }, 1000);
     });
 
-    // Love note toggle
+    // Love note with popping heart animation
     const roseHeart = document.getElementById('roseHeart');
     const loveNote = document.getElementById('loveNote');
+    let heartTimer = null;
     roseHeart.addEventListener('click', () => {
-      const visible = loveNote.style.display === 'block';
-      loveNote.style.display = visible ? 'none' : 'block';
-      roseHeart.setAttribute('aria-pressed', !visible);
-      roseHeart.style.opacity = visible ? '0.85' : '1';
+      const showing = loveNote.classList.contains('show');
+      if (!showing) {
+        loveNote.classList.add('show');
+        roseHeart.classList.add('pop');
+        roseHeart.setAttribute('aria-pressed', 'true');
+        heartTimer = setTimeout(() => { roseHeart.classList.remove('pop'); }, 460);
+      } else {
+        loveNote.classList.remove('show');
+        roseHeart.setAttribute('aria-pressed', 'false');
+      }
     });
     roseHeart.addEventListener('keypress', e => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -332,7 +327,7 @@
       }
     });
 
-    // PIXI.js setup for petals and golden orbs
+    // PIXI.js petals and golden orbs
     const appPixi = new PIXI.Application({
       view: document.getElementById('pixi-canvas'),
       resizeTo: window,
@@ -341,7 +336,6 @@
       antialias: true,
       alpha: true
     });
-
     const petals = [];
     const petalTexture = PIXI.Texture.from('https://i.ibb.co/pxqMg9B/rose-petal5.png');
     for (let i = 0; i < 20; i++) {
@@ -357,7 +351,6 @@
       petals.push(petal);
       appPixi.stage.addChild(petal);
     }
-
     const orbs = [];
     const colors = [0xffe5ec, 0xffc2d1, 0xffb3c6, 0xff8fab, 0xfb6f92, 0xffd700];
     for (let i = 0; i < 60; i++) {
@@ -375,7 +368,6 @@
       orb.alpha = alpha;
       orbs.push(orb);
       appPixi.stage.addChild(orb);
-
       if (radius > 9) {
         const glow = new PIXI.Graphics();
         glow.beginFill(color, 0.04);
@@ -390,40 +382,30 @@
         });
       }
     }
-
     appPixi.ticker.add(() => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
+      const width = window.innerWidth, height = window.innerHeight;
       petals.forEach(petal => {
-        petal.y += petal.floatSpeed;
-        petal.rotation += petal.angularSpeed;
+        petal.y += petal.floatSpeed; petal.rotation += petal.angularSpeed;
         petal.x += Math.sin(petal.y * 0.011) * 0.74;
         if (petal.y > height + 60) {
-          petal.y = -60;
-          petal.x = Math.random() * width;
+          petal.y = -60; petal.x = Math.random() * width;
         }
       });
-
       orbs.forEach(orb => {
-        orb.x += orb.vx;
-        orb.y += orb.vy;
+        orb.x += orb.vx; orb.y += orb.vy;
         if (orb.x < 0 || orb.x > width) orb.vx *= -1;
         if (orb.y < 0 || orb.y > height) orb.vy *= -1;
       });
     });
-
     window.addEventListener('deviceorientation', e => {
-      const gamma = e.gamma || 0;
-      const beta = e.beta || 0;
+      const gamma = e.gamma || 0, beta = e.beta || 0;
       petals.forEach((petal, i) => {
-        const offsetX = gamma * 0.1 * ((i % 6) + 1);
-        const offsetY = beta * 0.1 * (((i + 3) % 6) + 1);
+        const offsetX = gamma * 0.1 * ((i % 6) + 1),
+              offsetY = beta * 0.1 * (((i + 3) % 6) + 1);
         petal.x += offsetX * 0.025;
         petal.y += offsetY * 0.03;
       });
     }, true);
-
   </script>
 </body>
 </html>
