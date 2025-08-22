@@ -21,18 +21,33 @@
       margin:0;height:100%;background:#0a0a0a;color:#d94d86;
       font-family:'Quicksand',Arial,sans-serif;overflow:hidden
     }
-    /* Layout: a scrollable app area sized for mobile */
+
+    /* Scroll container that holds “pages”, but page 2 is locked until Yes */
     #app{
       position:relative;z-index:2;height:100vh;width:100vw;overflow:auto;
-      -webkit-overflow-scrolling:touch;padding:12vh 6vw calc(12vh + var(--safe-bottom));
-      display:block;scroll-behavior:smooth
+      -webkit-overflow-scrolling:touch;scroll-behavior:smooth;
+      padding:12vh 6vw calc(12vh + var(--safe-bottom));
     }
-    /* Background Canvas */
     #pixi-canvas{position:fixed;inset:0;z-index:1;pointer-events:none}
 
-    /* Sections stacked vertically inside the scroll area */
-    section.page{min-height:calc(100dvh - 24vh);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:16px}
-    /* Typography tuned for mobile first */
+    section.page{
+      min-height:calc(100dvh - 24vh);
+      display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:16px
+    }
+
+    /* Lock screen for page 2 (shown until Yes is clicked) */
+    #lockOverlay{
+      position:sticky;top:0;left:0;right:0;z-index:3;
+      display:none; /* becomes block when on page2 without unlock */
+      width:100%;padding:10px 0;margin:0 0 10px 0;
+      background:linear-gradient(90deg,#ff9abb33,#fb6f9244,#ff9abb33);
+      color:#ffd9e6;text-align:center;
+      font-family:'La Belle Aurore',cursive;
+      font-size:clamp(14px,4vw,18px);
+      backdrop-filter:blur(3px)
+    }
+
+    /* Typography tuned for mobile first (kept same sizing as you approved) */
     h1{
       margin:0;margin-top:6vh;text-align:center;max-width:92vw;
       font-family:'Parisienne',cursive;
@@ -45,7 +60,8 @@
       font-size:clamp(16px,4.4vw,24px);line-height:1.6;letter-spacing:.05em;
       color:#ff9abb;text-shadow:0 0 10px #fb6f92aa;
     }
-    /* Yes button: smaller and thumb-friendly */
+
+    /* Yes button (small, thumb-friendly) */
     #yesButton{
       font-family:'Great Vibes',cursive;font-size:clamp(22px,6vw,32px);
       padding:10px 22px;border:none;border-radius:999px;color:#fff;
@@ -53,14 +69,15 @@
       box-shadow:0 10px 30px #fb6f92aa;cursor:pointer
     }
     #yesButton:active{transform:scale(.96)}
-    /* Photo block kept inside viewport width */
+
+    /* Photo block sized to fit mobile screens */
     .gallery-container{width:min(92vw,520px);margin:14px auto 24px}
     .gallery-container img{
       width:100%;height:auto;border-radius:16px;
       filter:drop-shadow(0 0 16px #fb6f92cc)
     }
 
-    /* Love note + floating heart with bigger circular background */
+    /* Love note + floating heart with larger circular background */
     #loveNote{
       position:fixed;right:clamp(12px,4vw,22px);bottom:calc(88px + var(--safe-bottom));
       z-index:4;display:none;max-width:min(92vw,560px);
@@ -74,14 +91,13 @@
     #roseHeart{
       position:fixed;right:clamp(10px,4vw,22px);bottom:calc(16px + var(--safe-bottom));
       width:64px;height:64px;border-radius:50%;
-      background:radial-gradient(closest-side,#ffb3c7 0%,#ff8eaf 60%, transparent 61%) , var(--heart-bg);
+      background:radial-gradient(closest-side,#ffb3c7 0%,#ff8eaf 60%, transparent 61%), var(--heart-bg);
       box-shadow:0 0 28px #fb6f92dd;display:flex;align-items:center;justify-content:center;
       border:none;cursor:pointer;z-index:5
     }
     #roseHeart img{width:34px;height:34px;filter:drop-shadow(0 0 10px #ff6f9e)}
     #roseHeart:active{transform:scale(.94)}
 
-    /* Make sure everything fits even on very small screens */
     @media (max-width:380px){
       #app{padding-top:10vh;padding-bottom:calc(10vh + var(--safe-bottom))}
       h1{font-size:clamp(22px,7vw,34px)}
@@ -90,21 +106,29 @@
       #roseHeart{width:58px;height:58px}
       #roseHeart img{width:30px;height:30px}
     }
+
+    /* Hide page2 content until unlocked (keeps layout, sizes unchanged) */
+    .locked{filter:blur(6px) saturate(.7); pointer-events:none; user-select:none;}
   </style>
 </head>
 <body>
+  <!-- Animated background -->
   <canvas id="pixi-canvas" aria-hidden="true"></canvas>
 
+  <!-- Scrollable app with both “pages” inside the same index.html -->
   <div id="app" role="main" aria-live="polite">
-    <!-- Page 1 -->
+    <!-- PAGE 1 (always visible) -->
     <section id="page1" class="page" aria-label="Invitation">
       <h1>The weather is beautiful, the air calling,<br>& all I need is my beautiful wife by my side.</h1>
       <p class="lap">Would you like to join me for a date day tomorrow, the fine Saturday of August 23, in the year 2025? I would love to court you across the Big Apple.</p>
       <button id="yesButton">Yes</button>
     </section>
 
-    <!-- Page 2 -->
-    <section id="page2" class="page" aria-label="Date vibe">
+    <!-- LOCK BAR (shown when page2 is locked and scrolled into view) -->
+    <div id="lockOverlay">Tap “Yes” to unlock this page</div>
+
+    <!-- PAGE 2 (initially locked; same sizing and look) -->
+    <section id="page2" class="page locked" aria-label="Date vibe" aria-hidden="true">
       <h1>Welcome to Our Date Day, Priya</h1>
       <p class="lap">Imagine a day full of delicious food that originated over 2000 years ago, art whispering stories, drinks sparkling softly, roses, jasmine filling the air, and love letters waiting to be unfolded.</p>
       <div class="gallery-container">
@@ -124,90 +148,108 @@
   </div>
 
   <script>
-    // Play music only after "Yes"
+    // Music only after "Yes"
     const music = new Audio('song.mp3'); music.loop = true; music.volume = .32;
+
+    // Elements
     const yesButton = document.getElementById('yesButton');
-    const page1 = document.getElementById('page1');
     const page2 = document.getElementById('page2');
+    const lockOverlay = document.getElementById('lockOverlay');
+    let unlocked = false;
+
+    // Unlock page 2 ONLY via Yes button; keep sizes/appearance identical
     yesButton.addEventListener('click', () => {
       music.play().catch(()=>{});
-      // Smooth scroll to page 2 to keep content inside screen
+      unlocked = true;
+      page2.classList.remove('locked');
+      page2.setAttribute('aria-hidden','false');
+      lockOverlay.style.display = 'none';
+      // Smoothly scroll to the unlocked second section
       page2.scrollIntoView({behavior:'smooth',block:'start'});
     });
 
-    // Love note toggle: never remove the heart, just hide note
+    // If user scrolls to page2 before unlocking, show lock hint
+    const observer = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.target.id==='page2'){
+          if(e.isIntersecting && !unlocked){
+            lockOverlay.style.display = 'block';
+            page2.classList.add('locked');
+            page2.setAttribute('aria-hidden','true');
+          } else if (unlocked){
+            lockOverlay.style.display = 'none';
+          }
+        }
+      });
+    },{threshold:.25});
+    observer.observe(page2);
+
+    // Love note toggle (heart always present)
     const roseHeart = document.getElementById('roseHeart');
     const loveNote = document.getElementById('loveNote');
-    let noteOpen = false;
-    function toggleNote(){
-      noteOpen = !noteOpen;
-      loveNote.classList.toggle('show', noteOpen);
-      loveNote.setAttribute('aria-hidden', String(!noteOpen));
-    }
-    roseHeart.addEventListener('click', toggleNote);
+    roseHeart.addEventListener('click', ()=>{
+      const open = !loveNote.classList.contains('show');
+      loveNote.classList.toggle('show', open);
+      loveNote.setAttribute('aria-hidden', String(!open));
+    });
 
-    // PIXI background: mobile‑friendly hearts + roses animation
+    // PIXI animated background (petals + hearts), unchanged sizes/feel
     const appPixi = new PIXI.Application({
       view: document.getElementById('pixi-canvas'),
       resizeTo: window, transparent: true, antialias: true, resolution: devicePixelRatio
     });
 
-    // Textures
-    const petal = PIXI.Texture.from('https://i.ibb.co/8xkFjYs/rose-petal-soft.png'); // lightweight petal
-    const heartTex = new PIXI.Graphics(); // draw a heart once -> texture
-    function heartPath(g, size, color, alpha){
-      const s = size;
-      g.beginFill(color, alpha);
-      g.moveTo(0, -s*0.22);
-      g.bezierCurveTo(-s*0.5, -s*0.9, -s, -s*0.1, 0, s);
-      g.bezierCurveTo(s, -s*0.1, s*0.5, -s*0.9, 0, -s*0.22);
+    // Petal texture
+    const petal = PIXI.Texture.from('https://i.ibb.co/8xkFjYs/rose-petal-soft.png');
+
+    // Heart texture (vector -> texture for performance)
+    const heartG = new PIXI.Graphics();
+    function heart(g,s,c,a){
+      g.beginFill(c,a);
+      g.moveTo(0,-s*0.22);
+      g.bezierCurveTo(-s*0.5,-s*0.9,-s,-s*0.1,0,s);
+      g.bezierCurveTo(s,-s*0.1,s*0.5,-s*0.9,0,-s*0.22);
       g.endFill();
     }
-    heartPath(heartTex, 40, 0xFF6F9E, 0.22);
-    const heartTexture = appPixi.renderer.generateTexture(heartTex);
+    heart(heartG,40,0xFF6F9E,0.22);
+    const heartTex = appPixi.renderer.generateTexture(heartG);
 
-    // Petals
-    const petals = [];
+    const petals=[], hearts=[];
     for(let i=0;i<14;i++){
-      const sp = new PIXI.Sprite(petal);
-      sp.anchor.set(.5); sp.alpha=.65+Math.random()*0.25;
+      const sp=new PIXI.Sprite(petal);
+      sp.anchor.set(.5); sp.alpha=.65+Math.random()*.25;
       sp.scale.set(.12+Math.random()*.18);
-      sp.x = Math.random()*innerWidth; sp.y = Math.random()*innerHeight;
-      sp.vy = .25 + Math.random()*.45; sp.vx = (Math.random()-.5)*.4;
-      sp.spin = (Math.random()-.5)*.01;
+      sp.x=Math.random()*innerWidth; sp.y=Math.random()*innerHeight;
+      sp.vy=.25+Math.random()*.45; sp.vx=(Math.random()-.5)*.4;
+      sp.spin=(Math.random()-.5)*.01;
       petals.push(sp); appPixi.stage.addChild(sp);
     }
-
-    // Floating hearts/lanterns
-    const hearts = [];
     for(let i=0;i<28;i++){
-      const h = new PIXI.Sprite(heartTexture);
+      const h=new PIXI.Sprite(heartTex);
       h.anchor.set(.5);
-      const s = .6 + Math.random()*1.6;
+      const s=.6+Math.random()*1.6;
       h.scale.set(s);
-      h.alpha = .18 + Math.random()*.25;
-      h.x = Math.random()*innerWidth; h.y=Math.random()*innerHeight;
+      h.alpha=.18+Math.random()*.25;
+      h.x=Math.random()*innerWidth; h.y=Math.random()*innerHeight;
       h.vx=(Math.random()-.5)*.35; h.vy=.04+.15*Math.random();
-      h.pulse = Math.random()*Math.PI*2;
+      h.pulse=Math.random()*Math.PI*2;
       hearts.push(h); appPixi.stage.addChild(h);
     }
-
-    appPixi.ticker.add((d)=>{
+    appPixi.ticker.add(()=>{
       const w=innerWidth,h=innerHeight;
       petals.forEach(p=>{
         p.y+=p.vy; p.x+=Math.sin(p.y*.01)*.6 + p.vx; p.rotation+=p.spin;
         if(p.y>h+60){p.y=-40; p.x=Math.random()*w}
       });
       hearts.forEach((t,i)=>{
-        t.pulse += .02; const k = 1 + Math.sin(t.pulse)*.05;
+        t.pulse+=.02; const k = 1 + Math.sin(t.pulse)*.05;
         t.scale.set(t.scale.x*k, t.scale.y*k);
         t.x += t.vx; t.y += t.vy + Math.cos(t.pulse+i)*.03;
         if(t.y>h+40){t.y=-40; t.x=Math.random()*w}
         if(t.x<-40) t.x=w+40; if(t.x>w+40) t.x=-40;
       });
     });
-
-    // Small motion with device tilt
+    // Light parallax
     window.addEventListener('deviceorientation',(e)=>{
       const gx=(e.gamma||0)/60, gy=(e.beta||0)/80;
       appPixi.stage.x = gx*12; appPixi.stage.y = gy*10;
