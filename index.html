@@ -15,9 +15,7 @@
       --pink4: #FF94B4;
       --pink5: #FB6F92;
     }
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw; height: 100vh; min-height: 100vh;
       background: linear-gradient(135deg, var(--pink1) 0%, var(--pink2) 35%, var(--pink3) 65%, var(--pink5) 100%);
@@ -83,14 +81,14 @@
     }
     h1 {
       font-family: 'Parisienne', cursive;
-      font-size: 3rem;
+      font-size: 2.2rem;
       max-width: 750px;
       color: var(--pink5);
       letter-spacing: 0.05em;
-      text-shadow: 0 0 18px var(--pink4), 0 0 30px var(--pink5);
       margin: 5vh 0 1.5rem 0;
       user-select: text;
       position: relative;
+      text-shadow: 0 2px 18px var(--pink4),  0 0 18px var(--pink5);
     }
     h1::before {
       content: "";
@@ -108,16 +106,16 @@
     }
     p.lap {
       font-family: 'La Belle Aurore', cursive;
-      font-size: 1.38rem;
-      max-width: 880px;
+      font-size: 1.18rem;
+      max-width: 660px;
       margin: 1.5rem auto 3rem auto;
       color: #d1467e;
       text-shadow: 0 0 7px var(--pink4);
       letter-spacing: 0.045em;
       line-height: 1.6;
-      user-select: text;
       font-weight: 400;
       text-align: center;
+      user-select: text;
     }
     button {
       font-family: 'Great Vibes', cursive;
@@ -134,7 +132,7 @@
       user-select: none;
       margin-top: 1rem;
       margin-bottom: 3rem;
-      transition: background 0.3s ease, transform 0.18s cubic-bezier(0.61,0.09,0.63,1.21), box-shadow 0.28s;
+      transition: background 0.3s, transform 0.19s cubic-bezier(0.61,0.09,0.63,1.21), box-shadow 0.28s;
     }
     button:hover,
     button:focus {
@@ -149,13 +147,13 @@
     }
     #loveNote {
       font-family: 'Parisienne', cursive;
-      font-size: 1.3rem;
-      max-width: 430px;
+      font-size: 1.16rem;
+      max-width: 420px;
       color: var(--pink5);
-      background: rgba(255 240 250 / 0.95);
-      padding: 26px 36px;
-      border-radius: 28px;
-      box-shadow: 0 16px 36px rgba(251, 107, 143, 0.22);
+      background: rgba(255,240,250,0.95);
+      padding: 24px 36px;
+      border-radius: 24px;
+      box-shadow: 0 12px 26px rgba(251, 107, 143, 0.19);
       position: fixed;
       bottom: 110px;
       right: 30px;
@@ -164,145 +162,119 @@
       opacity: 0;
       transform: translateY(40px) scale(0.95);
       transition: opacity 0.32s cubic-bezier(0.56, 1.03, 0.7, 1.4), transform 0.32s cubic-bezier(0.56, 1.03, 0.7, 1.4);
+      text-align: center;
     }
-    #loveNote.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+    #loveNote.show { opacity: 1; transform: translateY(0) scale(1);}
     #roseHeart {
       position: fixed;
-      bottom: 26px;
-      right: 26px;
-      width: 70px;
-      height: 70px;
-      background: url("https://cdn.iconscout.com/icon/free/png-256/heart-170-458970.png") no-repeat center/contain;
+      right: 28px;
+      bottom: 28px;
+      width: 54px;
+      height: 54px;
+      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center/contain;
       background-size: contain;
       cursor: pointer;
       border-radius: 50%;
-      user-select: none;
       z-index: 40;
       filter: drop-shadow(0 0 15px var(--pink4));
-      transition: filter 0.22s, opacity 0.25s;
-      animation: heartPulse 2.9s ease-in-out infinite;
+      transition: filter 0.22s, opacity 0.25s, transform 0.22s;
+      animation: heartPulse 2.7s ease-in-out infinite;
+      opacity: 0.96;
+      user-select: none;
+      border: none;
+      outline: none;
     }
     #roseHeart.pop {
-      animation: heartPop 0.39s cubic-bezier(0.69, 1.7, 0.53, 0.88) 1;
-      filter: drop-shadow(0 0 27px var(--pink5));
+      animation: heartPop 0.37s cubic-bezier(.69,1.7,.53,.88) 1;
+      filter: drop-shadow(0 0 26px var(--pink5));
+      transform: scale(1.18) rotate(-8deg);
     }
     #roseHeart:hover {
       opacity: 1;
-      filter: drop-shadow(0 0 34px var(--pink5));
+      filter: drop-shadow(0 0 30px var(--pink5));
+      transform: scale(1.07);
     }
     @keyframes heartPop {
-      0% {
-        transform: scale(1) rotate(0deg);
-      }
-      10% {
-        transform: scale(1.23) rotate(-8deg);
-      }
-      35% {
-        transform: scale(0.9) rotate(7deg);
-      }
-      60% {
-        transform: scale(1.11) rotate(-4deg);
-      }
-      100% {
-        transform: scale(1.06) rotate(0);
-      }
+      0% { transform: scale(1) rotate(0deg);}
+      10% { transform: scale(1.23) rotate(-8deg);}
+      35% { transform: scale(0.9) rotate(7deg);}
+      60% { transform: scale(1.11) rotate(-4deg);}
+      100% { transform: scale(1.06) rotate(0);}
     }
     @keyframes heartPulse {
-      0%,
-      100% {
-        transform: scale(1);
-      }
-      18% {
-        transform: scale(1.06);
-      }
-      35% {
-        transform: scale(0.98);
-      }
-      55% {
-        transform: scale(1.09);
-      }
-      80% {
-        transform: scale(1);
-      }
+      0%, 100% { transform: scale(1);}
+      18% { transform: scale(1.08);}
+      35% { transform: scale(0.97);}
+      55% { transform: scale(1.13);}
+      80% { transform: scale(1);}
     }
     .gallery-container {
       position: relative;
-      width: 90vw;
-      max-width: 520px;
-      min-width: 240px;
-      height: 24vw;
-      max-height: 140px;
-      margin: 26px auto 24px auto;
-      background: var(--pink1);
-      border-radius: 22px;
-      overflow: hidden;
+      background: transparent;
+      box-shadow: none;
+      margin: 26px auto 20px auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 30px var(--pink3);
+      width: 210px;
+      height: 140px;
+      min-width: 0;
+      border-radius: 0;
+      max-width: 99vw;
+      overflow: visible;
     }
     .gallery-slide {
       position: relative;
-      width: 100%;
-      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      width: 100%; height: 100%;
     }
     .gallery-slide img {
+      background: transparent;
+      box-shadow: 0 4px 22px var(--pink3);
       width: auto;
       max-width: 100%;
       height: 100%;
+      min-height: 60px;
       max-height: 100%;
       object-fit: contain;
-      border-radius: 20px;
+      border-radius: 18px;
       display: block;
-      margin: auto;
-      box-shadow: 0 0 20px var(--pink3);
+      margin: 0 auto;
     }
     @media (max-width: 600px) {
       .gallery-container {
-        width: 95vw;
-        height: 40vw;
-        max-height: 250px;
-        border-radius: 18px;
+        width: 140px;
+        height: 86px;
+        margin-bottom: 18px;
       }
       .gallery-slide img {
-        height: 100%;
+        max-height: 86px;
+        min-height: 0;
+        border-radius: 12px;
       }
-      h1 {
-        font-size: 2rem;
-      }
-      p.lap {
-        font-size: 1.1rem;
-      }
-      button {
-        font-size: 1.6rem;
-      }
-      #loveNote {
-        max-width: 85vw;
-        font-size: 1.1rem;
-        padding: 20px 30px;
-        bottom: 90px;
-        right: 10vw;
-      }
-      #roseHeart {
-        width: 45px;
-        height: 45px;
-        bottom: 18px;
-        right: 18px;
-      }
+      h1 { font-size: 1.3rem; }
+      p.lap { font-size: .95rem; max-width: 92vw;}
+      #roseHeart { width: 38px; height: 38px; bottom: 12px; right: 12px;}
+      #loveNote { font-size: 0.97rem; max-width: 94vw; padding:14px 8px; bottom:60px; right:5vw;}
+      button { font-size: 1.2rem; }
+    }
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-50%) rotate(7deg);}
+      100% { transform: translateX(110%) translateY(-50%) rotate(7deg);}
     }
   </style>
 </head>
 <body>
+  <canvas id="pixi-canvas" aria-hidden="true" tabindex="-1"></canvas>
   <div id="app" aria-live="polite" role="main" tabindex="-1">
     <section id="page1" class="page active" aria-label="Invitation message">
       <h1>The weather is beautiful, the air is calling,<br />&amp; all I need is my beautiful wife by my side.</h1>
       <p class="lap">Would you like to join me for a date day tomorrow, the fine Saturday of August 23, in the year 2025? I would love to court you across the Big Apple.</p>
       <button id="yesButton" aria-label="Confirm attendance for the date">Yes</button>
     </section>
-
     <section id="page2" class="page" aria-label="Date vibe and photo" tabindex="-1">
       <h1>Welcome to Our Date Day, Priya</h1>
       <p class="lap">Imagine a day full of delicious food that originated over 2000 years ago, art whispering stories, drinks sparkling softly, roses, jasmine filling the air, and love letters waiting to be unfolded.</p>
@@ -313,20 +285,17 @@
       </div>
     </section>
   </div>
-
   <button id="roseHeart" type="button" aria-pressed="false" aria-label="Toggle love note" title="Toggle love note"></button>
-
   <div id="loveNote" role="alert" aria-live="assertive" aria-hidden="true" tabindex="-1">
     I love you, Priya.<br />I hope you like this little creation.<br />Tomorrow will be an amazing day and I can’t wait to begin.
   </div>
-
   <script>
-    // Show app immediately (no loading screen)
+    // Instantly show app (no loading)
     window.onload = () => {
       document.getElementById('app').hidden = false;
     };
 
-    // Music setup: no autoplay, play only on click of Yes button
+    // Music plays only on Yes
     const music = new Audio('song.mp3');
     music.volume = 0.3;
     music.loop = true;
@@ -345,9 +314,9 @@
       }, 1000);
     });
 
+    // Love note via heart
     const roseHeart = document.getElementById('roseHeart');
     const loveNote = document.getElementById('loveNote');
-
     roseHeart.addEventListener('click', () => {
       const isVisible = loveNote.classList.toggle('show');
       loveNote.setAttribute('aria-hidden', !isVisible);
@@ -360,7 +329,6 @@
         loveNote.focus();
       }
     });
-
     roseHeart.addEventListener('keypress', e => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -368,7 +336,7 @@
       }
     });
 
-    // Setup PIXI.js for petals and orbs
+    // Romantic petals & orbs background
     const appPixi = new PIXI.Application({
       view: document.getElementById('pixi-canvas'),
       resizeTo: window,
@@ -377,8 +345,6 @@
       antialias: true,
       alpha: true
     });
-
-    // Petals
     const petals = [];
     const petalTexture = PIXI.Texture.from('https://i.ibb.co/pxMgBk8/rose-petal.png');
     for (let i = 0; i < 20; i++) {
@@ -394,8 +360,6 @@
       petals.push(petal);
       appPixi.stage.addChild(petal);
     }
-
-    // Orbs
     const orbs = [];
     const colors = [0xffe5ec, 0xffc2d1, 0xffb6c2, 0xff94b4, 0xfb6f92, 0xffd700];
     for (let i = 0; i < 60; i++) {
@@ -428,14 +392,13 @@
         });
       }
     }
-
     appPixi.ticker.add(() => {
       const width = window.innerWidth;
       const height = window.innerHeight;
       petals.forEach((petal) => {
         petal.y += petal.floatSpeed;
         petal.rotation += petal.angularSpeed;
-        petal.x += Math.sin(petal.y * 0.011) * 0.74;
+        petal.x += Math.sin(petal.y * 0.011) * 0.65;
         if (petal.y > height + 60) {
           petal.y = -60;
           petal.x = Math.random() * width;
@@ -448,7 +411,6 @@
         if (orb.y < 0 || orb.y > height) orb.vy *= -1;
       });
     });
-
     window.addEventListener('deviceorientation', (e) => {
       const gamma = e.gamma || 0;
       const beta = e.beta || 0;
