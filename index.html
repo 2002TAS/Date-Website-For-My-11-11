@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Romantic Date Invitation SPA for Priya</title>
-  <!-- Fonts -->
+  <!-- Fonts: La Belle Aurore for paragraphs, Parisienne for headings, Quicksand for buttons, Great Vibes for Yes button -->
   <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Parisienne&family=Quicksand:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
   <style>
@@ -15,7 +15,9 @@
       --pink4: #FF8FAB;
       --pink5: #FB6F92;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
     html, body {
       width: 100vw; height: 100vh; min-height: 100vh;
       background: linear-gradient(135deg, var(--pink1) 0%, var(--pink2) 35%, var(--pink3) 65%, var(--pink5) 100%);
@@ -279,7 +281,6 @@
       }, 1000);
     };
 
-    // Music
     const music = document.getElementById('music');
     music.volume = 0.3;
     music.play().catch(() => {});
@@ -290,7 +291,6 @@
       }
     }, { once: true });
 
-    // Page nav
     const page1 = document.getElementById('page1');
     const page2 = document.getElementById('page2');
     const yesButton = document.getElementById('yesButton');
@@ -304,7 +304,6 @@
       }, 1000);
     });
 
-    // Love note with popping heart animation
     const roseHeart = document.getElementById('roseHeart');
     const loveNote = document.getElementById('loveNote');
     let heartTimer = null;
@@ -314,6 +313,7 @@
         loveNote.classList.add('show');
         roseHeart.classList.add('pop');
         roseHeart.setAttribute('aria-pressed', 'true');
+        if (heartTimer) clearTimeout(heartTimer);
         heartTimer = setTimeout(() => { roseHeart.classList.remove('pop'); }, 460);
       } else {
         loveNote.classList.remove('show');
@@ -327,7 +327,6 @@
       }
     });
 
-    // PIXI.js petals and golden orbs
     const appPixi = new PIXI.Application({
       view: document.getElementById('pixi-canvas'),
       resizeTo: window,
@@ -385,23 +384,27 @@
     appPixi.ticker.add(() => {
       const width = window.innerWidth, height = window.innerHeight;
       petals.forEach(petal => {
-        petal.y += petal.floatSpeed; petal.rotation += petal.angularSpeed;
+        petal.y += petal.floatSpeed;
+        petal.rotation += petal.angularSpeed;
         petal.x += Math.sin(petal.y * 0.011) * 0.74;
         if (petal.y > height + 60) {
-          petal.y = -60; petal.x = Math.random() * width;
+          petal.y = -60;
+          petal.x = Math.random() * width;
         }
       });
       orbs.forEach(orb => {
-        orb.x += orb.vx; orb.y += orb.vy;
+        orb.x += orb.vx;
+        orb.y += orb.vy;
         if (orb.x < 0 || orb.x > width) orb.vx *= -1;
         if (orb.y < 0 || orb.y > height) orb.vy *= -1;
       });
     });
     window.addEventListener('deviceorientation', e => {
-      const gamma = e.gamma || 0, beta = e.beta || 0;
+      const gamma = e.gamma || 0;
+      const beta = e.beta || 0;
       petals.forEach((petal, i) => {
-        const offsetX = gamma * 0.1 * ((i % 6) + 1),
-              offsetY = beta * 0.1 * (((i + 3) % 6) + 1);
+        const offsetX = gamma * 0.1 * ((i % 6) + 1);
+        const offsetY = beta * 0.1 * (((i + 3) % 6) + 1);
         petal.x += offsetX * 0.025;
         petal.y += offsetY * 0.03;
       });
