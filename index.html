@@ -1,12 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Date Invitation</title>
+  <meta charset="UTF-8" />
+  <title>Romantic Date Invitation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffe1e9, #fff7f9);
+      font-family: 'Montserrat', sans-serif;
+      color: #b33a3a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 6px rgba(255, 192, 203, 0.7);
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    button {
+      background: #ff497c;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(255, 73, 124, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #ff2470;
+      box-shadow: 0 6px 12px rgba(255, 36, 112, 0.8);
+    }
+
+    /* Subtle rose petals floating animation */
+    .petal {
+      position: absolute;
+      top: -50px;
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle at center, #ffb6c1 0%, #ff497c 70%);
+      border-radius: 50% 50% 50% 50% / 35% 35% 65% 65%;
+      opacity: 0.7;
+      animation-name: floatPetal;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-duration: 15s;
+    }
+
+    @keyframes floatPetal {
+      0% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateX(100px) translateY(500px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Your Special Invitation</h1>
-  <p>I’d love to take you on a date!</p>
-  <!-- To add music, put an mp3 file in a folder called 'audio' and update the path below -->
-  <audio controls src="audio/song.mp3"></audio>
+
+  <h1>Will You Join Me?</h1>
+  <p>A night of soft lights, laughter, and unforgettable moments awaits.</p>
+
+  <button id="musicToggle">Mute Music</button>
+
+  <audio id="backgroundMusic" src="song.mp3" autoplay loop></audio>
+
+  <!-- Add a few rose petals -->
+  <div class="petal" style="left: 15vw; animation-delay: 0s;"></div>
+  <div class="petal" style="left: 30vw; animation-delay: 5s;"></div>
+  <div class="petal" style="left: 50vw; animation-delay: 10s;"></div>
+  <div class="petal" style="left: 70vw; animation-delay: 3s;"></div>
+  <div class="petal" style="left: 85vw; animation-delay: 8s;"></div>
+
+  <script>
+    const music = document.getElementById('backgroundMusic');
+    const toggleButton = document.getElementById('musicToggle');
+
+    music.volume = 0.3;  // softer volume
+
+    toggleButton.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        toggleButton.textContent = 'Mute Music';
+      } else {
+        music.pause();
+        toggleButton.textContent = 'Play Music';
+      }
+    });
+
+    // Autoplay music may be blocked by browsers, so show button text accordingly
+    music.onplay = () => toggleButton.textContent = 'Mute Music';
+    music.onpause = () => toggleButton.textContent = 'Play Music';
+  </script>
 </body>
 </html>
