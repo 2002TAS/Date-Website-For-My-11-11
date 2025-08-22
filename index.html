@@ -4,16 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Romantic Date Invitation SPA for Priya</title>
-  <!-- Modern romantic font -->
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
-  <!-- Classic serif font for love note -->
-  <link href="https://fonts.googleapis.com/css2?family=Georgia&display=swap" rel="stylesheet" />
+
+  <!-- Playwrite México Guides font import -->
+  <link href="https://fonts.googleapis.com/css2?family=Playwrite+MX+Guides&display=swap" rel="stylesheet" />
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* Reset and base */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
     html, body {
       height: 100%; width: 100%;
-      font-family: 'Great Vibes', cursive;
+      overflow-x: hidden;
+      font-family: 'Playwrite MX Guides', cursive !important;
       background:
         radial-gradient(circle at 20% 50%, rgba(255,236,214,0.3), transparent 70%),
         radial-gradient(circle at 80% 60%, rgba(255,200,190,0.35), transparent 75%),
@@ -71,7 +79,7 @@
       animation: shine 4.5s linear infinite; border-radius: 50%; pointer-events: none;
     }
     p {
-      font-family: 'Georgia', serif; font-size: 1.34rem; max-width: 520px; font-weight: 500;
+      font-size: 1.34rem; max-width: 520px; font-weight: 500;
       margin-top: 28px; margin-bottom: 42px; line-height: 1.65;
       color: #6d3a23; letter-spacing: 0.035em;
       animation: fadeInSlideUp 1.75s ease forwards; user-select: text; text-shadow: none;
@@ -100,7 +108,7 @@
       box-shadow: 0 6px 25px rgba(255,206,81,0.9), 0 0 25px #ffd657;
       transition: all 0.45s cubic-bezier(0.4,0,0.2,1); animation: fadeInSlideUp 2s ease forwards;
       user-select: none; will-change: transform, box-shadow; transform-style: preserve-3d;
-      font-family: 'Great Vibes', cursive;
+      font-family: 'Playwrite MX Guides', cursive !important;
     }
     button:hover, button:focus {
       background: linear-gradient(135deg, #ffea6a 0%, #e3b731 100%);
@@ -111,12 +119,12 @@
       transform: translateZ(0) scale(0.95);
       box-shadow: 0 4px 20px rgba(194,153,0,0.95);
     }
-    /* Gallery Styles */
     .gallery-container {
       position: relative; max-width: 500px; height: 350px; margin: 35px auto 0;
       box-shadow: 0 8px 25px rgba(255,182,193,0.25); border-radius: 15px; overflow: hidden;
       background: #fff7f9;
       user-select: none; z-index: 24;
+      font-family: 'Playwrite MX Guides', cursive !important;
     }
     .gallery-slide {
       position: absolute; width: 100%; height: 100%;
@@ -144,7 +152,7 @@
     .gallery-next { right: 16px; }
     #loading {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      z-index: 1000; font-family: 'Great Vibes', cursive;
+      z-index: 1000; font-family: 'Playwrite MX Guides', cursive;
       font-size: 3rem; color: #d95769;
       text-shadow: 0 0 8px #fff, 0 0 20px #ff4f72;
       animation: blinkLoading 1.8s infinite; user-select: none;
@@ -183,9 +191,9 @@
       </p>
       <!-- Animated Photo Gallery -->
       <div class="gallery-container" id="gallery">
-        <div class="gallery-slide active"><img src="Northville Concours D’Elegance 2025.jpg" alt="Northville Concours D’Elegance 2025"></div>
-        <div class="gallery-slide"><img src="DSC07283.jpg" alt="Priya photo 2"></div>
-        <div class="gallery-slide"><img src="DSC07491.jpg" alt="Priya photo 3"></div>
+        <div class="gallery-slide active"><img src="Northville-Concours-DElegance-2025.jpg" alt="Northville Concours D’Elegance 2025"></div>
+        <div class="gallery-slide"><img src="DSC07283.jpg" alt="Romantic photo 2"></div>
+        <div class="gallery-slide"><img src="DSC07491.jpg" alt="Romantic photo 3"></div>
         <button class="gallery-prev" aria-label="Previous photo">&#10094;</button>
         <button class="gallery-next" aria-label="Next photo">&#10095;</button>
       </div>
@@ -244,8 +252,11 @@
     // PIXI.js romantic background
     const appPixi = new PIXI.Application({
       view: document.getElementById('pixi-canvas'),
-      resizeTo: window, transparent: true,
-      resolution: window.devicePixelRatio, antialias: true, alpha: true,
+      resizeTo: window,
+      transparent: true,
+      resolution: window.devicePixelRatio,
+      antialias: true,
+      alpha: true,
     });
     const petals = []; const petalCount = 20;
     const petalTexture = PIXI.Texture.from('https://i.ibb.co/gwQhDdD/rose-petal.png');
@@ -295,7 +306,6 @@
       });
     },true);
 
-    // Animated photo gallery controls & swipe
     const gallerySection = document.getElementById('gallery');
     const slides = gallerySection.querySelectorAll('.gallery-slide');
     const prevBtn = gallerySection.querySelector('.gallery-prev');
