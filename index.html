@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Romantic Date Invitation SPA for Priya</title>
-  <!-- Fonts: La Belle Aurore for paragraphs, Parisienne for headings, Quicksand for buttons, Great Vibes for Yes button -->
-  <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Parisienne&family=Quicksand:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+  <title>Romantic Invitation for Priya</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Parisienne&family=Quicksand:wght@600&family=Great+Vibes&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+
   <style>
     :root {
       --pink1: #FFE5EC;
@@ -15,18 +16,22 @@
       --pink4: #FF94B4;
       --pink5: #FB6F92;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
     html, body {
-      width: 100vw; height: 100vh; min-height: 100vh;
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
       background: linear-gradient(135deg, var(--pink1) 0%, var(--pink2) 35%, var(--pink3) 65%, var(--pink5) 100%);
-      color: #b53d78;
+      font-family: 'Quicksand', Arial, sans-serif;
+      color: #b35088;
       overflow-x: hidden;
       overscroll-behavior: contain;
       background-attachment: fixed;
-      font-family: 'Quicksand', Arial, sans-serif;
     }
     #app {
-      min-height: 100vh;
+      height: 100vh;
       width: 100vw;
       display: flex;
       flex-direction: column;
@@ -41,8 +46,10 @@
     }
     canvas#pixi-canvas {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       user-select: none;
       pointer-events: none;
       z-index: 0;
@@ -51,9 +58,10 @@
     }
     .page {
       position: absolute;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100vw;
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -62,7 +70,7 @@
       padding: 0 6vw;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 1s ease, transform 0.8s cubic-bezier(0.33, 1, 0.68, 1);
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
       user-select: text;
       z-index: 10;
       transform-style: preserve-3d;
@@ -81,19 +89,19 @@
     }
     h1 {
       font-family: 'Parisienne', cursive;
-      font-size: 2.2rem;
+      font-size: 3.5rem;
       max-width: 750px;
       color: var(--pink5);
-      letter-spacing: 0.05em;
-      margin: 5vh 0 1.5rem 0;
+      letter-spacing: 0.06em;
+      margin: 0 0 1.5rem 0;
       user-select: text;
+      text-shadow: 0 2px 20px var(--pink4), 0 0 20px var(--pink5);
       position: relative;
-      text-shadow: 0 2px 18px var(--pink4),  0 0 18px var(--pink5);
     }
     h1::before {
       content: "";
       position: absolute;
-      top: 45%;
+      top: 50%;
       left: -6%;
       width: 115%;
       height: 14px;
@@ -106,247 +114,303 @@
     }
     p.lap {
       font-family: 'La Belle Aurore', cursive;
-      font-size: 1.18rem;
-      max-width: 660px;
-      margin: 1.5rem auto 3rem auto;
-      color: #d1467e;
+      font-size: 1.6rem;
+      max-width: 720px;
+      margin: 2rem auto 4rem auto;
+      color: #cc3577;
       text-shadow: 0 0 7px var(--pink4);
       letter-spacing: 0.045em;
-      line-height: 1.6;
+      line-height: 1.65;
+      user-select: text;
       font-weight: 400;
       text-align: center;
-      user-select: text;
     }
     button {
       font-family: 'Great Vibes', cursive;
-      padding: 16px 50px;
-      font-size: 2.25rem;
+      padding: 18px 54px;
+      font-size: 2.75rem;
       font-weight: 600;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       cursor: pointer;
       border: none;
-      border-radius: 44px;
+      border-radius: 48px;
       background: linear-gradient(135deg, var(--pink4), var(--pink5));
       color: white;
-      box-shadow: 0 0 30px var(--pink5);
+      box-shadow: 0 0 40px var(--pink5);
       user-select: none;
-      margin-top: 1rem;
-      margin-bottom: 3rem;
-      transition: background 0.3s, transform 0.19s cubic-bezier(0.61,0.09,0.63,1.21), box-shadow 0.28s;
+      margin: 1rem 0 3rem 0;
+      transition: background 0.3s ease, transform 0.2s, box-shadow 0.3s;
     }
     button:hover,
     button:focus {
       background: linear-gradient(135deg, var(--pink5), var(--pink4));
-      transform: scale(1.08);
-      box-shadow: 0 0 44px var(--pink5);
+      transform: scale(1.12);
+      box-shadow: 0 0 50px var(--pink5);
       outline: none;
     }
     button:active {
       transform: scale(0.93);
-      box-shadow: 0 0 12px var(--pink4);
+      box-shadow: 0 0 14px var(--pink4);
     }
     #loveNote {
-      font-family: 'Parisienne', cursive;
-      font-size: 1.16rem;
-      max-width: 420px;
+      font-family: 'La Belle Aurore', cursive;
+      font-size: 1.3rem;
+      max-width: 460px;
       color: var(--pink5);
-      background: rgba(255,240,250,0.95);
-      padding: 24px 36px;
-      border-radius: 24px;
-      box-shadow: 0 12px 26px rgba(251, 107, 143, 0.19);
+      background: rgba(255, 240, 250, 0.95);
+      padding: 26px 38px;
+      border-radius: 28px;
+      box-shadow: 0 18px 42px rgba(251, 107, 143, 0.25);
       position: fixed;
-      bottom: 110px;
+      bottom: 150px;
       right: 30px;
       user-select: text;
       z-index: 31;
-      opacity: 0;
-      transform: translateY(40px) scale(0.95);
-      transition: opacity 0.32s cubic-bezier(0.56, 1.03, 0.7, 1.4), transform 0.32s cubic-bezier(0.56, 1.03, 0.7, 1.4);
+      opacity: 1;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: auto;
       text-align: center;
     }
-    #loveNote.show { opacity: 1; transform: translateY(0) scale(1);}
+    #loveNote.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(15px);
+    }
     #roseHeart {
       position: fixed;
       right: 28px;
       bottom: 28px;
       width: 54px;
       height: 54px;
-      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center/contain;
+      background: url("https://cdn.iconscout.com/icon/free/png-256/heart-170-458970.png")
+        no-repeat center;
       background-size: contain;
       cursor: pointer;
-      border-radius: 50%;
+      user-select: none;
       z-index: 40;
       filter: drop-shadow(0 0 15px var(--pink4));
-      transition: filter 0.22s, opacity 0.25s, transform 0.22s;
-      animation: heartPulse 2.7s ease-in-out infinite;
+      transition: filter 0.2s ease, opacity 0.25s ease, transform 0.25s ease;
       opacity: 0.96;
-      user-select: none;
       border: none;
       outline: none;
+      border-radius: 50%;
     }
     #roseHeart.pop {
-      animation: heartPop 0.37s cubic-bezier(.69,1.7,.53,.88) 1;
-      filter: drop-shadow(0 0 26px var(--pink5));
-      transform: scale(1.18) rotate(-8deg);
+      animation: popAnim 0.4s cubic-bezier(0.69, 1.7, 0.53, 0.88);
+      filter: drop-shadow(0 0 30px var(--pink5));
+      transform: scale(1.2) rotate(-10deg);
     }
     #roseHeart:hover {
       opacity: 1;
       filter: drop-shadow(0 0 30px var(--pink5));
-      transform: scale(1.07);
-    }
-    @keyframes heartPop {
-      0% { transform: scale(1) rotate(0deg);}
-      10% { transform: scale(1.23) rotate(-8deg);}
-      35% { transform: scale(0.9) rotate(7deg);}
-      60% { transform: scale(1.11) rotate(-4deg);}
-      100% { transform: scale(1.06) rotate(0);}
-    }
-    @keyframes heartPulse {
-      0%, 100% { transform: scale(1);}
-      18% { transform: scale(1.08);}
-      35% { transform: scale(0.97);}
-      55% { transform: scale(1.13);}
-      80% { transform: scale(1);}
+      transform: scale(1.1);
     }
     .gallery-container {
       position: relative;
-      background: transparent;
-      box-shadow: none;
-      margin: 26px auto 20px auto;
+      width: 95vw;
+      max-width: 400px;
+      min-width: 220px;
+      height: auto;
+      margin: 20px auto;
       display: flex;
-      align-items: center;
       justify-content: center;
-      width: 210px;
-      height: 140px;
-      min-width: 0;
-      border-radius: 0;
-      max-width: 99vw;
-      overflow: visible;
     }
-    .gallery-slide {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 20px;
-      width: 100%; height: 100%;
-    }
-    .gallery-slide img {
-      background: transparent;
-      box-shadow: 0 4px 22px var(--pink3);
-      width: auto;
+    .gallery-container img {
       max-width: 100%;
-      height: 100%;
-      min-height: 60px;
-      max-height: 100%;
+      height: auto;
       object-fit: contain;
-      border-radius: 18px;
-      display: block;
-      margin: 0 auto;
+      border-radius: 0;
+      box-shadow: none;
+      border-radius: 15px;
+      filter: drop-shadow(0 0 12px var(--pink5));
     }
     @media (max-width: 600px) {
       .gallery-container {
-        width: 140px;
-        height: 86px;
-        margin-bottom: 18px;
+        max-width: 280px;
+        margin: 15px auto;
       }
-      .gallery-slide img {
-        max-height: 86px;
-        min-height: 0;
-        border-radius: 12px;
+      .gallery-container img {
+        max-height: 140px;
       }
-      h1 { font-size: 1.3rem; }
-      p.lap { font-size: .95rem; max-width: 92vw;}
-      #roseHeart { width: 38px; height: 38px; bottom: 12px; right: 12px;}
-      #loveNote { font-size: 0.97rem; max-width: 94vw; padding:14px 8px; bottom:60px; right:5vw;}
-      button { font-size: 1.2rem; }
+      h1 {
+        font-size: 2.2rem;
+      }
+      p.lap {
+        font-size: 1.2rem;
+      }
+      button {
+        font-size: 2rem;
+      }
+      #loveNote {
+        max-width: 90vw;
+        font-size: 1.1rem;
+        bottom: 80px;
+        right: 10vw;
+      }
+      #roseHeart {
+        width: 48px;
+        height: 48px;
+        bottom: 20px;
+        right: 20px;
+      }
     }
     @keyframes shine {
-      0% { transform: translateX(-100%) translateY(-50%) rotate(7deg);}
-      100% { transform: translateX(110%) translateY(-50%) rotate(7deg);}
+      0% {
+        transform: translateX(-100%) translateY(-50%) rotate(7deg);
+      }
+      100% {
+        transform: translateX(110%) translateY(-50%) rotate(7deg);
+      }
+    }
+    @keyframes popAnim {
+      0% {
+        transform: scale(1) rotate(0deg);
+      }
+      10% {
+        transform: scale(1.25) rotate(-10deg);
+      }
+      35% {
+        transform: scale(0.9) rotate(8deg);
+      }
+      60% {
+        transform: scale(1.15) rotate(-5deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+    }
+    @keyframes blink {
+      0%,
+      50%,
+      100% {
+        opacity: 1;
+      }
+      25%,
+      75% {
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <canvas id="pixi-canvas" aria-hidden="true" tabindex="-1"></canvas>
-  <div id="app" aria-live="polite" role="main" tabindex="-1">
+  <canvas id="pixi-canvas" tabindex="-1" aria-hidden="true"></canvas>
+
+  <div id="app" role="main" aria-live="polite" tabindex="-1">
     <section id="page1" class="page active" aria-label="Invitation message">
-      <h1>The weather is beautiful, the air is calling,<br />&amp; all I need is my beautiful wife by my side.</h1>
-      <p class="lap">Would you like to join me for a date day tomorrow, the fine Saturday of August 23, in the year 2025? I would love to court you across the Big Apple.</p>
-      <button id="yesButton" aria-label="Confirm attendance for the date">Yes</button>
+      <h1>
+        The weather is beautiful, the air calling,
+        <br />
+        &amp; all I need is my beautiful wife by my side.
+      </h1>
+      <p class="lap">
+        Would you like to join me for a date day tomorrow,
+        the fine Saturday of August 23, in the year 2025? I
+        would love to court you across the Big Apple.
+      </p>
+      <button id="yesButton" aria-label="Confirm attendance for the date">
+        Yes
+      </button>
     </section>
-    <section id="page2" class="page" aria-label="Date vibe and photo" tabindex="-1">
+
+    <section id="page2" class="page" aria-label="Date and vibe" tabindex="-1">
       <h1>Welcome to Our Date Day, Priya</h1>
-      <p class="lap">Imagine a day full of delicious food that originated over 2000 years ago, art whispering stories, drinks sparkling softly, roses, jasmine filling the air, and love letters waiting to be unfolded.</p>
+      <p class="lap">
+        Imagine a day full of delicious food that originated
+        over 2000 years ago, art whispering stories, drinks
+        sparkling softly, roses, jasmine filling the air, and
+        love letters waiting to be unfolded.
+      </p>
       <div class="gallery-container" id="gallery">
-        <div class="gallery-slide">
-          <img src="Photo 1.jpg" alt="Photo of romantic day" />
-        </div>
+        <img src="Photo 1.jpg" alt="Photo of romantic day" />
       </div>
     </section>
   </div>
-  <button id="roseHeart" type="button" aria-pressed="false" aria-label="Toggle love note" title="Toggle love note"></button>
-  <div id="loveNote" role="alert" aria-live="assertive" aria-hidden="true" tabindex="-1">
-    I love you, Priya.<br />I hope you like this little creation.<br />Tomorrow will be an amazing day and I can’t wait to begin.
+
+  <button
+    id="roseHeart"
+    type="button"
+    aria-pressed="false"
+    aria-label="Toggle love note"
+    title="Toggle love note"
+  ></button>
+  <div
+    id="loveNote"
+    class="hidden"
+    role="alert"
+    aria-live="assertive"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    I love you, Priya.
+    <br />
+    I hope you like this little creation.
+    <br />
+    Tomorrow will be an amazing day and I can’t wait.
   </div>
+
   <script>
-    // Instantly show app (no loading)
     window.onload = () => {
-      document.getElementById('app').hidden = false;
+      document.getElementById("app").hidden = false;
     };
 
-    // Music plays only on Yes
-    const music = new Audio('song.mp3');
+    const music = new Audio("song.mp3");
     music.volume = 0.3;
     music.loop = true;
 
-    const yesButton = document.getElementById('yesButton');
-    yesButton.addEventListener('click', () => {
+    const yesButton = document.getElementById("yesButton");
+    yesButton.addEventListener("click", () => {
       music.play().catch(() => {});
-      const page1 = document.getElementById('page1');
-      const page2 = document.getElementById('page2');
-      page1.classList.add('exit');
-      page1.classList.remove('active');
+      const page1 = document.getElementById("page1");
+      const page2 = document.getElementById("page2");
+      page1.classList.add("exit");
+      page1.classList.remove("active");
       setTimeout(() => {
-        page2.classList.add('active');
-        page2.classList.remove('exit');
+        page2.classList.add("active");
+        page2.classList.remove("exit");
         page2.focus();
       }, 1000);
     });
 
-    // Love note via heart
-    const roseHeart = document.getElementById('roseHeart');
-    const loveNote = document.getElementById('loveNote');
-    roseHeart.addEventListener('click', () => {
-      const isVisible = loveNote.classList.toggle('show');
-      loveNote.setAttribute('aria-hidden', !isVisible);
-      roseHeart.setAttribute('aria-pressed', isVisible);
-      roseHeart.classList.add('pop');
-      setTimeout(() => {
-        roseHeart.classList.remove('pop');
-      }, 460);
+    const roseHeart = document.getElementById("roseHeart");
+    const loveNote = document.getElementById("loveNote");
+
+    roseHeart.addEventListener("click", () => {
+      const isVisible = !loveNote.classList.contains("hidden");
       if (isVisible) {
+        // Hide love note, show heart
+        loveNote.classList.add("hidden");
+        loveNote.setAttribute("aria-hidden", "true");
+        roseHeart.style.display = "block";
+        roseHeart.setAttribute("aria-pressed", "false");
+      } else {
+        // Show love note, hide heart
+        loveNote.classList.remove("hidden");
+        loveNote.setAttribute("aria-hidden", "false");
+        roseHeart.style.display = "none";
         loveNote.focus();
       }
     });
-    roseHeart.addEventListener('keypress', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
+
+    roseHeart.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         roseHeart.click();
       }
     });
 
-    // Romantic petals & orbs background
     const appPixi = new PIXI.Application({
-      view: document.getElementById('pixi-canvas'),
-      resizeTo: window,
+      view: document.getElementById("pixi-canvas"),
+      resize: window,
       transparent: true,
       resolution: window.devicePixelRatio,
       antialias: true,
-      alpha: true
+      alpha: true,
     });
+
     const petals = [];
-    const petalTexture = PIXI.Texture.from('https://i.ibb.co/pxMgBk8/rose-petal.png');
+    const petalTexture = PIXI.Texture.from(
+      "https://cdn.jsdelivr.net/gh/jackadamfadem/romantic-pixijs@main/assets/petal.png"
+    );
     for (let i = 0; i < 20; i++) {
       const petal = new PIXI.Sprite(petalTexture);
       petal.anchor.set(0.5);
@@ -360,6 +424,7 @@
       petals.push(petal);
       appPixi.stage.addChild(petal);
     }
+
     const orbs = [];
     const colors = [0xffe5ec, 0xffc2d1, 0xffb6c2, 0xff94b4, 0xfb6f92, 0xffd700];
     for (let i = 0; i < 60; i++) {
@@ -382,19 +447,15 @@
         glow.beginFill(color);
         glow.drawCircle(0, 0, radius * 2.2);
         glow.endFill();
-        glow.alpha = alpha * 0.3;
+        glow.alpha = 0.3 * alpha;
         glow.x = orb.x;
         glow.y = orb.y;
         appPixi.stage.addChild(glow);
-        appPixi.ticker.add(() => {
-          glow.x = orb.x;
-          glow.y = orb.y;
-        });
       }
     }
     appPixi.ticker.add(() => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const width = window.innerWidth,
+        height = window.innerHeight;
       petals.forEach((petal) => {
         petal.y += petal.floatSpeed;
         petal.rotation += petal.angularSpeed;
@@ -411,16 +472,16 @@
         if (orb.y < 0 || orb.y > height) orb.vy *= -1;
       });
     });
-    window.addEventListener('deviceorientation', (e) => {
-      const gamma = e.gamma || 0;
-      const beta = e.beta || 0;
+    window.addEventListener("deviceorientation", (e) => {
+      const gamma = e.gamma || 0,
+        beta = e.beta || 0;
       petals.forEach((petal, i) => {
-        const offsetX = gamma * 0.025 * ((i % 6) + 1);
-        const offsetY = beta * 0.03 * (((i + 3) % 6) + 1);
+        const offsetX = gamma * 0.025 * ((i % 6) + 1),
+          offsetY = beta * 0.03 * (((i + 3) % 6) + 1);
         petal.x += offsetX;
         petal.y += offsetY;
       });
-    }, true);
+    });
   </script>
 </body>
 </html>
