@@ -2,499 +2,216 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Romantic Date Invitation SPA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Romantic Invitation for Priya</title>
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Parisienne&family=Quicksand:wght@600&family=Great+Vibes&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+
   <style>
-    :root {
-      --pink1: #FFE5EC;
-      --pink2: #FFC2D1;
-      --pink3: #FFB6C2;
-      --pink4: #FF94B4;
-      --pink5: #FB6F92;
-      --heart-bg: rgba(251, 111, 146, 0.35);
+    :root{
+      --pink1:#FFE5EC;--pink2:#FFC2D1;--pink3:#FFB6C2;--pink4:#FF94B4;--pink5:#FB6F92;
+      --heart-bg:rgba(251,111,146,.35);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-right:  env(safe-area-inset-right, 0px);
     }
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{
+      margin:0;height:100%;background:#0a0a0a;color:#d94d86;
+      font-family:'Quicksand',Arial,sans-serif;overflow:hidden
     }
-    html, body {
-      width: 100vw;
-      height: 100vh;
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--pink1) 0%, var(--pink2) 35%, var(--pink3) 65%, var(--pink5) 100%);
-      font-family: 'Quicksand', Arial, sans-serif;
-      color: #b35088;
-      overflow: hidden;
-      overscroll-behavior: contain;
-      background-attachment: fixed;
+    /* Layout: a scrollable app area sized for mobile */
+    #app{
+      position:relative;z-index:2;height:100vh;width:100vw;overflow:auto;
+      -webkit-overflow-scrolling:touch;padding:12vh 6vw calc(12vh + var(--safe-bottom));
+      display:block;scroll-behavior:smooth
     }
-    #app {
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      background: transparent;
-      position: relative;
-      z-index: 10;
-      cursor: url("https://cdn.iconscout.com/icon/free/png-256/heart-170-458970.png"), auto;
-      transform-style: preserve-3d;
+    /* Background Canvas */
+    #pixi-canvas{position:fixed;inset:0;z-index:1;pointer-events:none}
+
+    /* Sections stacked vertically inside the scroll area */
+    section.page{min-height:calc(100dvh - 24vh);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:16px}
+    /* Typography tuned for mobile first */
+    h1{
+      margin:0;margin-top:6vh;text-align:center;max-width:92vw;
+      font-family:'Parisienne',cursive;
+      font-size:clamp(24px,6.8vw,42px);line-height:1.18;letter-spacing:.05em;
+      color:#ffc0d5;text-shadow:0 0 14px #fb6f92,0 0 22px #fb6f92;
     }
-    canvas#pixi-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      user-select: none;
-      pointer-events: none;
-      z-index: 0;
-      will-change: transform;
-      filter: drop-shadow(0 0 15px var(--pink5));
-      background: transparent;
+    p.lap{
+      margin:6px 0 18px;text-align:center;max-width:92vw;
+      font-family:'La Belle Aurore',cursive;
+      font-size:clamp(16px,4.4vw,24px);line-height:1.6;letter-spacing:.05em;
+      color:#ff9abb;text-shadow:0 0 10px #fb6f92aa;
     }
-    .page {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: transparent;
-      padding: 0 6vw;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
-      user-select: text;
-      z-index: 10;
-      transform-style: preserve-3d;
+    /* Yes button: smaller and thumb-friendly */
+    #yesButton{
+      font-family:'Great Vibes',cursive;font-size:clamp(22px,6vw,32px);
+      padding:10px 22px;border:none;border-radius:999px;color:#fff;
+      background:linear-gradient(135deg,var(--pink4),var(--pink5));
+      box-shadow:0 10px 30px #fb6f92aa;cursor:pointer
     }
-    .page.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-      z-index: 20;
+    #yesButton:active{transform:scale(.96)}
+    /* Photo block kept inside viewport width */
+    .gallery-container{width:min(92vw,520px);margin:14px auto 24px}
+    .gallery-container img{
+      width:100%;height:auto;border-radius:16px;
+      filter:drop-shadow(0 0 16px #fb6f92cc)
     }
-    .page.exit {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(30px);
-      z-index: 5;
+
+    /* Love note + floating heart with bigger circular background */
+    #loveNote{
+      position:fixed;right:clamp(12px,4vw,22px);bottom:calc(88px + var(--safe-bottom));
+      z-index:4;display:none;max-width:min(92vw,560px);
+      background:rgba(255,240,250,.97);color:#c73a77;border-radius:18px;
+      padding:16px 18px;text-align:center;
+      font-family:'La Belle Aurore',cursive;font-size:clamp(16px,4.2vw,22px);
+      box-shadow:0 18px 44px #fb6f9222
     }
-    h1 {
-      font-family: 'Parisienne', cursive;
-      font-size: 4rem;
-      max-width: 900px;
-      color: var(--pink5);
-      letter-spacing: 0.10em;
-      margin: 0 0 1.8rem 0;
-      user-select: text;
-      text-shadow: 0 0 30px var(--pink5), 0 0 48px var(--pink5);
-      position: relative;
+    #loveNote.show{display:block}
+
+    #roseHeart{
+      position:fixed;right:clamp(10px,4vw,22px);bottom:calc(16px + var(--safe-bottom));
+      width:64px;height:64px;border-radius:50%;
+      background:radial-gradient(closest-side,#ffb3c7 0%,#ff8eaf 60%, transparent 61%) , var(--heart-bg);
+      box-shadow:0 0 28px #fb6f92dd;display:flex;align-items:center;justify-content:center;
+      border:none;cursor:pointer;z-index:5
     }
-    h1::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: -6%;
-      width: 115%;
-      height: 18px;
-      background: linear-gradient(135deg, transparent, var(--pink4), transparent);
-      opacity: 0.36;
-      transform: translateX(-100%) translateY(-50%) rotate(7deg);
-      animation: shine 4.5s linear infinite;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    p.lap {
-      font-family: 'La Belle Aurore', cursive;
-      font-size: 2.4rem;
-      max-width: 880px;
-      margin: 2.2rem auto 4.2rem;
-      color: #db3577;
-      text-shadow: 0 0 25px var(--pink5);
-      letter-spacing: 0.08em;
-      line-height: 1.76;
-      font-weight: 400;
-      text-align: center;
-      user-select: text;
-    }
-    button {
-      font-family: 'Great Vibes', cursive;
-      padding: 18px 52px;
-      font-size: 2.5rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      cursor: pointer;
-      border: none;
-      border-radius: 48px;
-      background: linear-gradient(135deg, var(--pink4), var(--pink5));
-      color: white;
-      box-shadow: 0 0 85px var(--pink5);
-      user-select: none;
-      margin: 1rem 0 3rem;
-      z-index: 30;
-      transition: background 0.3s ease, transform 0.2s cubic-bezier(0.61,0.09,0.63,1.21), box-shadow 0.28s;
-    }
-    button:hover,
-    button:focus {
-      background: linear-gradient(135deg, var(--pink5), var(--pink4));
-      transform: scale(1.09);
-      box-shadow: 0 0 100px var(--pink5);
-      outline: none;
-    }
-    button:active {
-      transform: scale(0.93);
-      box-shadow: 0 0 30px var(--pink4);
-    }
-    #loveNote {
-      font-family: 'La Belle Aurore', cursive;
-      font-size: 2rem;
-      max-width: 520px;
-      color: var(--pink5);
-      background: rgba(255, 240, 250, 0.95);
-      padding: 38px 56px;
-      border-radius: 37px;
-      box-shadow: 0 26px 80px rgba(251, 107, 143, 0.22), 0 0 100px var(--pink5);
-      position: fixed;
-      bottom: 150px;
-      right: 58px;
-      user-select: text;
-      z-index: 31;
-      opacity: 1;
-      pointer-events: auto;
-      text-align: center;
-      display: none;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    #loveNote.show {
-      display: block;
-    }
-    #roseHeart {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      width: 90px; /* bigger circular background */
-      height: 90px;
-      background: var(--heart-bg);
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 40;
-      box-shadow: 0 0 40px var(--pink5), 0 0 30px var(--pink4);
-      transition: filter 0.3s, opacity 0.25s, transform 0.25s;
-      opacity: 0.95;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: none;
-      outline: none;
-    }
-    #roseHeart img {
-      width: 48px; /* heart smaller inside big circle */
-      height: 48px;
-      pointer-events: none;
-      filter: drop-shadow(0 0 20px var(--pink4));
-      user-select: none;
-    }
-    #roseHeart.pop {
-      animation: popAnim 0.5s cubic-bezier(0.69, 1.7, 0.53, 0.88);
-      filter: drop-shadow(0 0 80px var(--pink5));
-      transform: scale(1.15) rotate(-15deg);
-    }
-    #roseHeart:hover {
-      opacity: 1;
-      box-shadow: 0 0 65px var(--pink5), 0 0 50px var(--pink4);
-      transform: scale(1.12);
-    }
-    .gallery-container {
-      position: relative;
-      width: 100vw;
-      max-width: 730px;
-      min-width: 290px;
-      height: auto;
-      margin: 66px auto 46px;
-      display: flex;
-      justify-content: center;
-    }
-    .gallery-container img {
-      max-width: 100%;
-      width: 130%; /* bigger by ~14% */
-      height: auto;
-      border-radius: 40px;
-      filter: drop-shadow(0 0 36px var(--pink5));
-      margin: auto;
-      box-shadow: 0 0 80px var(--pink5), 0 0 44px var(--pink4);
-      display: block;
-      transition: filter 0.3s ease;
-    }
-    @media (max-width: 650px) {
-      .gallery-container {
-        max-width: 405px;
-        margin: 34px auto 20px;
-      }
-      .gallery-container img {
-        max-height: 230px;
-        width: 108vw;
-      }
-      h1 {
-        font-size: 2.8rem;
-      }
-      p.lap {
-        font-size: 1.6rem;
-      }
-      button {
-        font-size: 2.6rem;
-        padding: 26px 38px;
-      }
-      #loveNote {
-        font-size: 1.8rem;
-        padding: 26px 30px;
-        right: 20px;
-        bottom: 120px;
-        max-width: 85vw;
-      }
-      #roseHeart {
-        width: 64px;
-        height: 64px;
-        bottom: 20px;
-        right: 20px;
-      }
-      #roseHeart img {
-        width: 38px;
-        height: 38px;
-      }
-    }
-    @keyframes shine {
-      0% {
-        transform: translateX(-100%) translateY(-50%) rotate(7deg);
-      }
-      100% {
-        transform: translateX(110%) translateY(-50%) rotate(7deg);
-      }
-    }
-    @keyframes popAnim {
-      0% {
-        transform: scale(1) rotate(0deg);
-      }
-      10% {
-        transform: scale(1.25) rotate(-11deg);
-      }
-      35% {
-        transform: scale(0.9) rotate(8deg);
-      }
-      60% {
-        transform: scale(1.15) rotate(-5deg);
-      }
-      100% {
-        transform: scale(1) rotate(0deg);
-      }
+    #roseHeart img{width:34px;height:34px;filter:drop-shadow(0 0 10px #ff6f9e)}
+    #roseHeart:active{transform:scale(.94)}
+
+    /* Make sure everything fits even on very small screens */
+    @media (max-width:380px){
+      #app{padding-top:10vh;padding-bottom:calc(10vh + var(--safe-bottom))}
+      h1{font-size:clamp(22px,7vw,34px)}
+      p.lap{font-size:clamp(14px,4.6vw,20px)}
+      #yesButton{font-size:clamp(20px,6.4vw,28px);padding:9px 18px}
+      #roseHeart{width:58px;height:58px}
+      #roseHeart img{width:30px;height:30px}
     }
   </style>
 </head>
 <body>
-  <canvas id="pixi-canvas" tabindex="-1" aria-hidden="true"></canvas>
+  <canvas id="pixi-canvas" aria-hidden="true"></canvas>
 
-  <div id="app" role="main" aria-live="polite" tabindex="-1">
-    <section id="page1" class="page active" aria-label="Invitation message">
-      <h1>
-        The weather is beautiful, the air calling,
-        <br />
-        &amp; all I need is my beautiful wife by my side.
-      </h1>
-      <p class="lap">
-        Would you like to join me for a date day tomorrow,
-        the fine Saturday of August 23, in the year 2025?
-        I would love to court you across the Big Apple.
-      </p>
-      <button id="yesButton" aria-label="Confirm attendance for the date">
-        Yes
-      </button>
+  <div id="app" role="main" aria-live="polite">
+    <!-- Page 1 -->
+    <section id="page1" class="page" aria-label="Invitation">
+      <h1>The weather is beautiful, the air calling,<br>& all I need is my beautiful wife by my side.</h1>
+      <p class="lap">Would you like to join me for a date day tomorrow, the fine Saturday of August 23, in the year 2025? I would love to court you across the Big Apple.</p>
+      <button id="yesButton">Yes</button>
     </section>
 
-    <section id="page2" class="page" aria-label="Date and vibe" tabindex="-1">
+    <!-- Page 2 -->
+    <section id="page2" class="page" aria-label="Date vibe">
       <h1>Welcome to Our Date Day, Priya</h1>
-      <p class="lap">
-        Imagine a day full of delicious food that originated
-        over 2000 years ago, art whispering stories, drinks
-        sparkling softly, roses, jasmine filling the air, and
-        love letters waiting to be unfolded.
-      </p>
-      <div class="gallery-container" id="gallery">
-        <img src="Photo 1.jpg" alt="Photo of romantic day" />
+      <p class="lap">Imagine a day full of delicious food that originated over 2000 years ago, art whispering stories, drinks sparkling softly, roses, jasmine filling the air, and love letters waiting to be unfolded.</p>
+      <div class="gallery-container">
+        <img src="Photo 1.jpg" alt="Photo of us on our romantic day">
       </div>
     </section>
   </div>
 
-  <button
-    id="roseHeart"
-    type="button"
-    aria-pressed="false"
-    aria-label="Toggle love note"
-    title="Toggle love note"
-  >
-    <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="" aria-hidden="true" />
+  <!-- Floating heart toggle and love note -->
+  <button id="roseHeart" aria-label="Open love note">
+    <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="" aria-hidden="true">
   </button>
-
-  <div
-    id="loveNote"
-    role="alert"
-    aria-hidden="true"
-    tabindex="-1"
-    class="hidden"
-    style="display:none;"
-  >
-    I love you, Priya.<br />
-    I hope you like this little creation.<br />
+  <div id="loveNote" role="dialog" aria-modal="true">
+    I love you, Priya.<br>
+    I hope you like this little creation.<br>
     Tomorrow will be an amazing day and I can’t wait.
   </div>
 
   <script>
-    window.onload = () => {
-      document.getElementById("app").hidden = false;
-    };
-
-    const music = new Audio("song.mp3");
-    music.volume = 0.3;
-    music.loop = true;
-
-    const yesButton = document.getElementById("yesButton");
-    yesButton.addEventListener("click", () => {
-      music.play().catch(() => {});
-      const page1 = document.getElementById("page1");
-      const page2 = document.getElementById("page2");
-      page1.classList.add("exit");
-      page1.classList.remove("active");
-      setTimeout(() => {
-        page2.classList.add("active");
-        page2.classList.remove("exit");
-        page2.focus();
-      }, 1000);
+    // Play music only after "Yes"
+    const music = new Audio('song.mp3'); music.loop = true; music.volume = .32;
+    const yesButton = document.getElementById('yesButton');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    yesButton.addEventListener('click', () => {
+      music.play().catch(()=>{});
+      // Smooth scroll to page 2 to keep content inside screen
+      page2.scrollIntoView({behavior:'smooth',block:'start'});
     });
 
-    const roseHeart = document.getElementById("roseHeart");
-    const loveNote = document.getElementById("loveNote");
+    // Love note toggle: never remove the heart, just hide note
+    const roseHeart = document.getElementById('roseHeart');
+    const loveNote = document.getElementById('loveNote');
+    let noteOpen = false;
+    function toggleNote(){
+      noteOpen = !noteOpen;
+      loveNote.classList.toggle('show', noteOpen);
+      loveNote.setAttribute('aria-hidden', String(!noteOpen));
+    }
+    roseHeart.addEventListener('click', toggleNote);
 
-    roseHeart.addEventListener("click", () => {
-      const isVisible = !loveNote.classList.contains("show");
-      if (isVisible) {
-        loveNote.classList.add("show");
-        loveNote.style.display = "block";
-        loveNote.setAttribute("aria-hidden", "false");
-        roseHeart.style.display = "none";
-        roseHeart.classList.add("pop");
-        setTimeout(() => roseHeart.classList.remove("pop"), 350);
-        loveNote.focus();
-      } else {
-        loveNote.classList.remove("show");
-        loveNote.style.display = "none";
-        loveNote.setAttribute("aria-hidden", "true");
-        roseHeart.style.display = "flex";
-      }
-    });
-
-    roseHeart.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        roseHeart.click();
-      }
-    });
-
+    // PIXI background: mobile‑friendly hearts + roses animation
     const appPixi = new PIXI.Application({
-      view: document.getElementById("pixi-canvas"),
-      resize: window,
-      transparent: true,
-      resolution: window.devicePixelRatio,
-      antialias: true,
-      alpha: true,
+      view: document.getElementById('pixi-canvas'),
+      resizeTo: window, transparent: true, antialias: true, resolution: devicePixelRatio
     });
 
-    // Rose petals
+    // Textures
+    const petal = PIXI.Texture.from('https://i.ibb.co/8xkFjYs/rose-petal-soft.png'); // lightweight petal
+    const heartTex = new PIXI.Graphics(); // draw a heart once -> texture
+    function heartPath(g, size, color, alpha){
+      const s = size;
+      g.beginFill(color, alpha);
+      g.moveTo(0, -s*0.22);
+      g.bezierCurveTo(-s*0.5, -s*0.9, -s, -s*0.1, 0, s);
+      g.bezierCurveTo(s, -s*0.1, s*0.5, -s*0.9, 0, -s*0.22);
+      g.endFill();
+    }
+    heartPath(heartTex, 40, 0xFF6F9E, 0.22);
+    const heartTexture = appPixi.renderer.generateTexture(heartTex);
+
+    // Petals
     const petals = [];
-    const petalTexture = PIXI.Texture.from("https://cdn.iconscout.com/icon/petal-60a3b4f8368b7613999c99a274dbbcd8a2299cc1dbf26023643fab7a3a21bc9a.png");
-    for (let i = 0; i < 20; i++) {
-      const petal = new PIXI.Sprite(petalTexture);
-      petal.anchor.set(0.5);
-      petal.x = Math.random() * window.innerWidth;
-      petal.y = Math.random() * window.innerHeight;
-      petal.alpha = 0.6 + Math.random() * 0.35;
-      petal.scale.set(0.14 + Math.random() * 0.3);
-      petal.rotation = Math.random() * Math.PI * 2;
-      petal.angularSpeed = 0.002 + Math.random() * 0.004;
-      petal.floatSpeed = 0.25 + Math.random() * 0.5;
-      petals.push(petal);
-      appPixi.stage.addChild(petal);
+    for(let i=0;i<14;i++){
+      const sp = new PIXI.Sprite(petal);
+      sp.anchor.set(.5); sp.alpha=.65+Math.random()*0.25;
+      sp.scale.set(.12+Math.random()*.18);
+      sp.x = Math.random()*innerWidth; sp.y = Math.random()*innerHeight;
+      sp.vy = .25 + Math.random()*.45; sp.vx = (Math.random()-.5)*.4;
+      sp.spin = (Math.random()-.5)*.01;
+      petals.push(sp); appPixi.stage.addChild(sp);
     }
 
-    // Hearts lantern-like orbs, pulsing & drifting
-    const orbs = [];
-    const colors = [0xffe066, 0xffc2d1, 0xffb6c2, 0xff94b4, 0xfb6f92, 0xffd700];
-    for (let i = 0; i < 60; i++) {
-      const orb = new PIXI.Graphics();
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const radius = (3 + Math.random() * 10) * (Math.random() < 0.3 ? 1.5 : 1);
-      const alpha = 0.12 + Math.random() * 0.25;
-      orb.beginFill(color, alpha);
-      orb.drawEllipse(0, 0, radius, radius * 0.75);
-      orb.endFill();
-      orb.x = Math.random() * window.innerWidth;
-      orb.y = Math.random() * window.innerHeight;
-      orb.vx = (Math.random() - 0.5) * 0.15;
-      orb.vy = (Math.random() - 0.5) * 0.15;
-      orb.alpha = alpha;
-      orbs.push(orb);
-      appPixi.stage.addChild(orb);
-      if (radius > 9) {
-        const glow = new PIXI.Graphics();
-        glow.beginFill(color);
-        glow.drawEllipse(0, 0, radius * 2.3, radius * 1.75);
-        glow.endFill();
-        glow.alpha = 0.3 * alpha;
-        glow.x = orb.x;
-        glow.y = orb.y;
-        appPixi.stage.addChild(glow);
-      }
+    // Floating hearts/lanterns
+    const hearts = [];
+    for(let i=0;i<28;i++){
+      const h = new PIXI.Sprite(heartTexture);
+      h.anchor.set(.5);
+      const s = .6 + Math.random()*1.6;
+      h.scale.set(s);
+      h.alpha = .18 + Math.random()*.25;
+      h.x = Math.random()*innerWidth; h.y=Math.random()*innerHeight;
+      h.vx=(Math.random()-.5)*.35; h.vy=.04+.15*Math.random();
+      h.pulse = Math.random()*Math.PI*2;
+      hearts.push(h); appPixi.stage.addChild(h);
     }
 
-    appPixi.ticker.add(() => {
-      const width = window.innerWidth,
-        height = window.innerHeight;
-      petals.forEach((petal) => {
-        petal.y += petal.floatSpeed;
-        petal.rotation += petal.angularSpeed;
-        petal.x += Math.sin(petal.y * 0.011) * 0.65;
-        if (petal.y > height + 80) {
-          petal.y = -80;
-          petal.x = Math.random() * width;
-        }
+    appPixi.ticker.add((d)=>{
+      const w=innerWidth,h=innerHeight;
+      petals.forEach(p=>{
+        p.y+=p.vy; p.x+=Math.sin(p.y*.01)*.6 + p.vx; p.rotation+=p.spin;
+        if(p.y>h+60){p.y=-40; p.x=Math.random()*w}
       });
-      orbs.forEach((orb) => {
-        orb.x += orb.vx;
-        orb.y += orb.vy;
-        if (orb.x < 0 || orb.x > width) orb.vx *= -1;
-        if (orb.y < 0 || orb.y > height) orb.vy *= -1;
+      hearts.forEach((t,i)=>{
+        t.pulse += .02; const k = 1 + Math.sin(t.pulse)*.05;
+        t.scale.set(t.scale.x*k, t.scale.y*k);
+        t.x += t.vx; t.y += t.vy + Math.cos(t.pulse+i)*.03;
+        if(t.y>h+40){t.y=-40; t.x=Math.random()*w}
+        if(t.x<-40) t.x=w+40; if(t.x>w+40) t.x=-40;
       });
     });
 
-    window.addEventListener("deviceorientation", (e) => {
-      const gamma = e.gamma || 0,
-        beta = e.beta || 0;
-      petals.forEach((petal, i) => {
-        const offsetX = gamma * 0.025 * ((i % 6) + 1),
-          offsetY = beta * 0.03 * (((i + 3) % 6) + 1);
-        petal.x += offsetX;
-        petal.y += offsetY;
-      });
-      orbs.forEach((orb, i) => {
-        orb.x += (e.gamma || 0) * 0.017 * ((i % 10) + 1);
-      });
-    });
+    // Small motion with device tilt
+    window.addEventListener('deviceorientation',(e)=>{
+      const gx=(e.gamma||0)/60, gy=(e.beta||0)/80;
+      appPixi.stage.x = gx*12; appPixi.stage.y = gy*10;
+    }, true);
   </script>
 </body>
 </html>
