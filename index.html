@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Romantic Date Invitation SPA for Priya</title>
-  <!-- Parisienne font for headings/love note, Quicksand for body for readability -->
+
+  <!-- Parisienne font for headings/love note, Quicksand for readability -->
   <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+
   <style>
     :root {
       --pink1: #FFE5EC;
@@ -154,58 +156,72 @@
     }
     .gallery-container {
       position: relative;
-      max-width: 400px; height: 220px;
-      margin: 24px auto 0;
-      box-shadow: 0 8px 26px var(--pink3)46;
-      border-radius: 10px;
-      overflow: hidden;
+      width: 90vw; max-width: 520px; min-width: 240px;
+      height: 58vw; max-height: 70vh; min-height: 160px;
+      margin: 26px auto 18px auto;
       background: var(--pink1);
-      user-select: none;
-      z-index: 25;
-      font-family: 'Quicksand', Arial, sans-serif;
-      margin-bottom: 35px
+      border-radius: 22px;
+      box-shadow: 0 10px 38px var(--pink2)55;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .gallery-slide {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      border-radius: 10px;
+      width: 100%; height: 100%;
+      opacity: 0; z-index: 1;
+      border-radius: 22px;
       background: var(--pink1);
-      transition: opacity 1s cubic-bezier(.56,-0.05,.78,1.28);
-      z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.8s cubic-bezier(.54,1.2,.55,1.08);
     }
-    .gallery-slide.active {
-      opacity: 1;
-      position: relative;
-      z-index: 2;
-    }
+    .gallery-slide.active { opacity: 1; z-index: 2; }
     .gallery-slide img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      border-radius: 10px; box-shadow: 0 2px 12px rgba(255, 179, 193, 0.2);
-      transition: transform 0.6s cubic-bezier(.33,1.29,.73,1.23);
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px var(--pink2)99;
+      display: block;
     }
-    .gallery-prev,
-    .gallery-next {
+    .gallery-nav {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: var(--pink3); color: var(--pink5);
-      border: none; padding: 7px 14px; font-size: 1.75rem;
-      border-radius: 50%; cursor: pointer; box-shadow: 0 0 7px var(--pink4);
-      user-select: none; transition: background 0.2s;
+      font-size: 3rem;
+      color: var(--pink5);
+      background: rgba(255,255,255,0.78);
+      border: none;
+      border-radius: 50%;
+      width: 54px; height: 54px;
+      box-shadow: 0 3px 18px var(--pink4)55, 0 0 12px #fff6fb;
+      cursor: pointer;
       z-index: 10;
+      opacity: 0.85;
+      display: flex; align-items: center; justify-content: center;
+      transition: box-shadow 0.3s, background 0.3s, opacity 0.2s, color 0.2s;
+      user-select: none;
     }
-    .gallery-prev:hover, .gallery-next:hover {
-      background: var(--pink5); color: var(--pink1);
+    .gallery-nav:active {
+      background: var(--pink4); color: #fff;
+      box-shadow: 0 6px 18px var(--pink5)ee;
+      opacity: 1;
     }
-    .gallery-prev { left: 10px; }
-    .gallery-next { right: 10px; }
-    @media only screen and (max-width: 650px) {
+    .gallery-prev { left: 12px; }
+    .gallery-next { right: 12px; }
+    @media (max-width: 600px) {
+      .gallery-container {
+        width: 98vw; max-width: 100vw; min-width: 0;
+        height: 58vw; max-height: 70vw; min-height:100px;
+        border-radius: 17px;
+      }
+      .gallery-nav {
+        width: 44px; height: 44px;
+        font-size: 2.1rem;
+      }
       h1 { font-size: 2rem; }
-      .gallery-container { width: 97vw; height: 130px; }
-      #loveNote { width: 83vw; bottom: 70px; right: 5vw; font-size: 1.03rem; }
-      #roseHeart { width: 40px; height: 40px; bottom: 10px; right: 13px; }
+      #loveNote { width: 83vw; bottom: 54px; right: 5vw; font-size: 1rem; }
+      #roseHeart { width: 34px; height:34px; bottom: 8px; right: 8px; }
       button { font-size: 1rem; padding: 12px 29px; }
     }
     @keyframes fadeInSlideDown { 0% { opacity: 0; transform: translateY(-28px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -234,11 +250,11 @@
         drinks sparkling softly, roses, gentle jasmine filling the air, and love letters waiting to be unfolded.
       </p>
       <div class="gallery-container" id="gallery">
+        <button class="gallery-nav gallery-prev" aria-label="Previous photo">&#10094;</button>
         <div class="gallery-slide active"><img src="Photo 1.jpg" alt="Photo 1"></div>
         <div class="gallery-slide"><img src="Photo 2.jpg" alt="Photo 2"></div>
         <div class="gallery-slide"><img src="Photo 3.jpg" alt="Photo 3"></div>
-        <button class="gallery-prev" aria-label="Previous photo">&#10094;</button>
-        <button class="gallery-next" aria-label="Next photo">&#10095;</button>
+        <button class="gallery-nav gallery-next" aria-label="Next photo">&#10095;</button>
       </div>
     </section>
   </div>
@@ -394,7 +410,7 @@
       touchStartX = e.changedTouches[0].screenX;
     });
     gallerySection.addEventListener("touchend", (e) => {
-      touchEndX = e.changedTouches.screenX;
+      touchEndX = e.changedTouches[0].screenX;
       if (touchEndX < touchStartX - 30) nextBtn.click();
       else if (touchEndX > touchStartX + 30) prevBtn.click();
     });
