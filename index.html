@@ -7,7 +7,6 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Parisienne&family=Quicksand:wght@600&family=Great+Vibes&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
-
   <style>
     :root {
       --pink1: #FFE5EC;
@@ -16,13 +15,9 @@
       --pink4: #FF94B4;
       --pink5: #FB6F92;
     }
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
-      width: 100vw;
-      height: 100vh;
-      min-height: 100vh;
+      width: 100vw; height: 100vh; min-height: 100vh;
       background: linear-gradient(135deg, var(--pink1) 0%, var(--pink2) 35%, var(--pink3) 65%, var(--pink5) 100%);
       font-family: 'Quicksand', Arial, sans-serif;
       color: #b35088;
@@ -89,11 +84,11 @@
     }
     h1 {
       font-family: 'Parisienne', cursive;
-      font-size: 3.5rem;
+      font-size: 2.2rem;
       max-width: 750px;
       color: var(--pink5);
       letter-spacing: 0.06em;
-      margin: 0 0 1.5rem 0;
+      margin: 0 0 1.3rem 0;
       user-select: text;
       text-shadow: 0 2px 20px var(--pink4), 0 0 20px var(--pink5);
       position: relative;
@@ -114,144 +109,148 @@
     }
     p.lap {
       font-family: 'La Belle Aurore', cursive;
-      font-size: 1.6rem;
-      max-width: 720px;
-      margin: 2rem auto 4rem auto;
+      font-size: 0.7rem; /* 1.6rem - 0.3rem*3 = 0.7rem */
+      max-width: 570px;
+      margin: 1.2rem auto 2.2rem auto;
       color: #cc3577;
-      text-shadow: 0 0 7px var(--pink4);
+      text-shadow: 0 0 5px var(--pink4);
       letter-spacing: 0.045em;
-      line-height: 1.65;
+      line-height: 1.57;
       user-select: text;
       font-weight: 400;
       text-align: center;
     }
     button {
       font-family: 'Great Vibes', cursive;
-      padding: 18px 54px;
-      font-size: 2.75rem;
+      padding: 10px 25px;
+      font-size: 1.85rem;
       font-weight: 600;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.09em;
       cursor: pointer;
       border: none;
-      border-radius: 48px;
+      border-radius: 38px;
       background: linear-gradient(135deg, var(--pink4), var(--pink5));
       color: white;
-      box-shadow: 0 0 40px var(--pink5);
+      box-shadow: 0 0 30px var(--pink5);
       user-select: none;
-      margin: 1rem 0 3rem 0;
-      transition: background 0.3s ease, transform 0.2s, box-shadow 0.3s;
+      margin: 1rem 0 2.5rem 0;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      z-index: 30;
     }
     button:hover,
     button:focus {
       background: linear-gradient(135deg, var(--pink5), var(--pink4));
-      transform: scale(1.12);
-      box-shadow: 0 0 50px var(--pink5);
+      transform: scale(1.11);
+      box-shadow: 0 0 38px var(--pink5);
       outline: none;
     }
     button:active {
       transform: scale(0.93);
-      box-shadow: 0 0 14px var(--pink4);
+      box-shadow: 0 0 9px var(--pink4);
     }
     #loveNote {
       font-family: 'La Belle Aurore', cursive;
-      font-size: 1.3rem;
-      max-width: 460px;
+      font-size: 0.95rem;
+      max-width: 420px;
       color: var(--pink5);
       background: rgba(255, 240, 250, 0.95);
-      padding: 26px 38px;
-      border-radius: 28px;
-      box-shadow: 0 18px 42px rgba(251, 107, 143, 0.25);
+      padding: 17px 24px;
+      border-radius: 17px;
+      box-shadow: 0 12px 26px rgba(251, 107, 143, 0.19);
       position: fixed;
-      bottom: 150px;
-      right: 30px;
+      bottom: 100px;
+      right: 24px;
       user-select: text;
       z-index: 31;
       opacity: 1;
       transition: opacity 0.3s ease, transform 0.3s ease;
       pointer-events: auto;
       text-align: center;
+      display: none;
     }
-    #loveNote.hidden {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(15px);
+    #loveNote.show {
+      display: block;
     }
     #roseHeart {
       position: fixed;
-      right: 28px;
-      bottom: 28px;
-      width: 54px;
-      height: 54px;
-      background: url("https://cdn.iconscout.com/icon/free/png-256/heart-170-458970.png")
+      right: 22px;
+      bottom: 22px;
+      width: 46px;
+      height: 46px;
+      background: url("https://cdn-icons-png.flaticon.com/512/833/833472.png")
         no-repeat center;
       background-size: contain;
       cursor: pointer;
       user-select: none;
       z-index: 40;
       filter: drop-shadow(0 0 15px var(--pink4));
-      transition: filter 0.2s ease, opacity 0.25s ease, transform 0.25s ease;
-      opacity: 0.96;
+      transition: filter 0.2s, opacity 0.25s, transform 0.22s;
+      opacity: 0.97;
       border: none;
       outline: none;
       border-radius: 50%;
+      display: block;
     }
     #roseHeart.pop {
       animation: popAnim 0.4s cubic-bezier(0.69, 1.7, 0.53, 0.88);
       filter: drop-shadow(0 0 30px var(--pink5));
-      transform: scale(1.2) rotate(-10deg);
+      transform: scale(1.12) rotate(-8deg);
     }
     #roseHeart:hover {
       opacity: 1;
       filter: drop-shadow(0 0 30px var(--pink5));
-      transform: scale(1.1);
+      transform: scale(1.07);
     }
     .gallery-container {
       position: relative;
       width: 95vw;
-      max-width: 400px;
+      max-width: 456px; /* 400 * 1.14 ≈ 456 */
       min-width: 220px;
       height: auto;
-      margin: 20px auto;
+      margin: 18px auto;
       display: flex;
       justify-content: center;
     }
     .gallery-container img {
       max-width: 100%;
+      width: 112%;
       height: auto;
       object-fit: contain;
-      border-radius: 0;
-      box-shadow: none;
-      border-radius: 15px;
-      filter: drop-shadow(0 0 12px var(--pink5));
+      border-radius: 19px;
+      box-shadow: 0 0 20px var(--pink4);
+      margin: 0 auto;
+      filter: drop-shadow(0 0 16px var(--pink4));
     }
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
       .gallery-container {
-        max-width: 280px;
-        margin: 15px auto;
+        max-width: 258px;
+        margin: 14px auto;
       }
       .gallery-container img {
-        max-height: 140px;
+        max-height: 125px;
       }
       h1 {
-        font-size: 2.2rem;
+        font-size: 1.19rem;
       }
       p.lap {
-        font-size: 1.2rem;
+        font-size: 0.55rem;
       }
       button {
-        font-size: 2rem;
+        font-size: 1.18rem;
+        padding: 8px 16px;
       }
       #loveNote {
         max-width: 90vw;
-        font-size: 1.1rem;
-        bottom: 80px;
-        right: 10vw;
+        font-size: 0.77rem;
+        bottom: 57px;
+        right: 8vw;
+        padding: 10px 7px;
       }
       #roseHeart {
-        width: 48px;
-        height: 48px;
-        bottom: 20px;
-        right: 20px;
+        width: 32px;
+        height: 32px;
+        bottom: 9px;
+        right: 9px;
       }
     }
     @keyframes shine {
@@ -267,27 +266,16 @@
         transform: scale(1) rotate(0deg);
       }
       10% {
-        transform: scale(1.25) rotate(-10deg);
+        transform: scale(1.17) rotate(-11deg);
       }
       35% {
         transform: scale(0.9) rotate(8deg);
       }
       60% {
-        transform: scale(1.15) rotate(-5deg);
+        transform: scale(1.11) rotate(-5deg);
       }
       100% {
         transform: scale(1) rotate(0deg);
-      }
-    }
-    @keyframes blink {
-      0%,
-      50%,
-      100% {
-        opacity: 1;
-      }
-      25%,
-      75% {
-        opacity: 0;
       }
     }
   </style>
@@ -298,27 +286,17 @@
   <div id="app" role="main" aria-live="polite" tabindex="-1">
     <section id="page1" class="page active" aria-label="Invitation message">
       <h1>
-        The weather is beautiful, the air calling,
-        <br />
-        &amp; all I need is my beautiful wife by my side.
+        The weather is beautiful, the air calling,<br />&amp; all I need is my beautiful wife by my side.
       </h1>
       <p class="lap">
-        Would you like to join me for a date day tomorrow,
-        the fine Saturday of August 23, in the year 2025? I
-        would love to court you across the Big Apple.
+        Would you like to join me for a date day tomorrow, the fine Saturday of August 23, in the year 2025? I would love to court you across the Big Apple.
       </p>
-      <button id="yesButton" aria-label="Confirm attendance for the date">
-        Yes
-      </button>
+      <button id="yesButton" aria-label="Confirm attendance for the date">Yes</button>
     </section>
-
     <section id="page2" class="page" aria-label="Date and vibe" tabindex="-1">
       <h1>Welcome to Our Date Day, Priya</h1>
       <p class="lap">
-        Imagine a day full of delicious food that originated
-        over 2000 years ago, art whispering stories, drinks
-        sparkling softly, roses, jasmine filling the air, and
-        love letters waiting to be unfolded.
+        Imagine a day full of delicious food that originated over 2000 years ago, art whispering stories, drinks sparkling softly, roses, jasmine filling the air, and love letters waiting to be unfolded.
       </p>
       <div class="gallery-container" id="gallery">
         <img src="Photo 1.jpg" alt="Photo of romantic day" />
@@ -332,22 +310,19 @@
     aria-pressed="false"
     aria-label="Toggle love note"
     title="Toggle love note"
+    style="display: block"
   ></button>
   <div
     id="loveNote"
-    class="hidden"
     role="alert"
     aria-live="assertive"
     tabindex="-1"
     aria-hidden="true"
+    class=""
+    style="display: none"
   >
-    I love you, Priya.
-    <br />
-    I hope you like this little creation.
-    <br />
-    Tomorrow will be an amazing day and I can’t wait.
+    I love you, Priya.<br />I hope you like this little creation.<br />Tomorrow will be an amazing day and I can’t wait.
   </div>
-
   <script>
     window.onload = () => {
       document.getElementById("app").hidden = false;
@@ -375,19 +350,19 @@
     const loveNote = document.getElementById("loveNote");
 
     roseHeart.addEventListener("click", () => {
-      const isVisible = !loveNote.classList.contains("hidden");
+      const isVisible = loveNote.classList.toggle("show");
+      loveNote.setAttribute("aria-hidden", !isVisible);
+      roseHeart.setAttribute("aria-pressed", isVisible);
+      roseHeart.classList.add("pop");
       if (isVisible) {
-        // Hide love note, show heart
-        loveNote.classList.add("hidden");
-        loveNote.setAttribute("aria-hidden", "true");
-        roseHeart.style.display = "block";
-        roseHeart.setAttribute("aria-pressed", "false");
-      } else {
-        // Show love note, hide heart
-        loveNote.classList.remove("hidden");
-        loveNote.setAttribute("aria-hidden", "false");
+        loveNote.style.display = "block";
         roseHeart.style.display = "none";
+        setTimeout(() => roseHeart.classList.remove("pop"), 350);
         loveNote.focus();
+      } else {
+        loveNote.style.display = "none";
+        roseHeart.style.display = "block";
+        setTimeout(() => roseHeart.classList.remove("pop"), 350);
       }
     });
 
